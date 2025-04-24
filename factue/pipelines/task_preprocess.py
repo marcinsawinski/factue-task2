@@ -1,55 +1,62 @@
 from pathlib import Path
+
 import luigi
 import pandas as pd
-import fasttext
-from factue.utils.vars import fasttetxt_model_path
 
-model = fasttext.load_model(fasttetxt_model_path)
+from factue.methods.textual import detect_lang
+
+from .paths import generate_output_path
+
+column_mapping = {
+    "normalized claim": "gold",
+    "post": "post",
+}
 
 
 class PreprocessTask(luigi.Task):
-    version = luigi.Parameter(default="v2", significant=True)
-    input_path = luigi.Parameter()
+    input_file = luigi.Parameter()
     input_dir = luigi.Parameter()
     output_dir = luigi.Parameter()
 
-    # Define a function to detect language
-    def _detect_lang(sel, text):
-        if not text or not isinstance(text, str):
-            return None
-        prediction = model.predict(text)
-        return prediction[0][0].replace("__label__", "")
-
     def output(self):
-        relative_path = Path(self.input_path).relative_to(self.input_dir)
-        relative_path = relative_path.with_suffix(".parquet")
-        output_path = self.output_dir / relative_path
-        return luigi.LocalTarget(str(output_path))
+        output_path = generate_output_path(
+            input_file=self.input_file,
+            input_dir=self.input_dir,
+            output_dir=self.output_dir,
+        )
+
+        return luigi.LocalTarget(output_path)
 
     def run(self):
         output_path = Path(self.output().path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        df = pd.read_parquet(self.input_path)
-        df["lang"] = df["post"].apply(self._detect_lang)
-        df.to_parquet(output_path, index=False)
-        print(f"Converted {self.input_path} -> {output_path}")
+
+        df = pd.read_csv(self.input_file).rename(columns=column_mapping)
+        if "post" in df.columns:
+            df[["post_lang", "post_lang_score"]] = df["post"].apply(
+                lambda x: pd.Series(detect_lang(x))
+            )
+        if "gold" in df.columns:
+            df[["gold_lang", "gold_lang_score"]] = df["gold"].apply(
+                lambda x: pd.Series(detect_lang(x))
+            )
+        df.to_parquet(output_path, index=True)
+        print(f"Converted {self.input_file} -> {output_path}")
 
 
-class PreprocessAll(luigi.WrapperTask):
+class ConvertAllCSVs(luigi.WrapperTask):
     def requires(self):
-
-        input_dir = Path("data/parquet/input")
-        output_dir = Path("data/parquet/preprocessed")
+        input_dir = Path("data/raw")
+        output_dir = Path("data/parquet/input")
         return [
             PreprocessTask(
-                input_path=str(input_file),
+                input_file=str(input_file),
                 input_dir=input_dir,
                 output_dir=output_dir,
-                version="v3",
             )
-            for input_file in input_dir.glob("**/*.parquet")
+            for input_file in input_dir.glob("**/*.csv")
         ]
 
 
 if __name__ == "__main__":
-    luigi.run(["PreprocessAll", "--local-scheduler"])
+    luigi.run(["ConvertAllCSVs", "--local-scheduler"])

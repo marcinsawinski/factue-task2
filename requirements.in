@@ -11,8 +11,8 @@ dotenv
 duckdb
 pydantic
 dvc[gdrive]
-fasttext
-
+fast-langdetect
+blingfire
 black[jupyter]
 isort
 flake8

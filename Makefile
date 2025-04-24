@@ -1,4 +1,4 @@
-.PHONY: setup compile sync clean env run test lint pipeline
+.PHONY: setup update clean env run test lint pipeline
 
 # Setup venv + pip-tools + editable install
 # pip-compile requirements.in --output-file=requirements.txt && 
@@ -12,15 +12,11 @@ setup:
 	echo "Setup complete!"
 
 # Compile dependencies (if you're using pip-tools)
-compile:
+update:
 	. .venv/bin/activate && pip-compile requirements.in --output-file=requirements.txt && \
-	echo "pip-compile completed!"
+	pip-sync requirements.txt && \
+	echo "pip-tools completed!"
 
-# Sync environment with pinned dependencies
-
-sync:
-	. .venv/bin/activate && pip-sync requirements.txt && \
-	echo "pip-sync complete!"
 
 # Remove the venv & build artifacts
 clean:
