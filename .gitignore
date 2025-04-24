@@ -174,4 +174,4 @@ cython_debug/
 .pypirc
 .venv/*
 /data
-factue/convert_csv2parquet.py
+gdrive-creds.json

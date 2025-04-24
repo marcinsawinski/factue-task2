@@ -1,4 +1,18 @@
+-e .
 pandas
+jinja2
 luigi
 ipykernel
+factue
+pyarrow
+fastparquet
+dotenv
+duckdb
+pydantic
 dvc[gdrive]
+fasttext
+
+black[jupyter]
+isort
+flake8
+mypy

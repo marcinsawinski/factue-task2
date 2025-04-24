@@ -1,18 +1,18 @@
-.PHONY: setup deps sync dev clean env run test lint pipeline
+.PHONY: setup compile sync clean env run test lint pipeline
 
 # Setup venv + pip-tools + editable install
+# pip-compile requirements.in --output-file=requirements.txt && 
+
 setup:
 
 	python3 -m venv .venv
 	. .venv/bin/activate && \
 	pip install --upgrade pip pip-tools && \
-	pip-compile requirements.in --output-file=requirements.txt && \
 	pip-sync requirements.txt && \
-	pip install -e . && \
 	echo "Setup complete!"
 
 # Compile dependencies (if you're using pip-tools)
-deps:
+compile:
 	. .venv/bin/activate && pip-compile requirements.in --output-file=requirements.txt && \
 	echo "pip-compile completed!"
 
@@ -42,7 +42,7 @@ test:
 
 # Lint & format code
 lint:
-	black gf/ 
-	isort gf/ 
-	flake8 gf/
-	mypy gf/
+	black factue/ 
+	isort factue/ 
+	flake8 factue/
+	mypy factue/
