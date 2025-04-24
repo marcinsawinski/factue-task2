@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the target directory
-MODEL_DIR="factue/models"
+MODEL_DIR="models"
 MODEL_URL="https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin"
 MODEL_FILE="$MODEL_DIR/lid.176.bin"
 
