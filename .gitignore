@@ -175,3 +175,4 @@ cython_debug/
 .venv/*
 /data
 gdrive-creds.json
+factue/models/*
