@@ -1,5 +1,6 @@
 -e .
 pandas
+pandas-stubs
 jinja2
 luigi
 ipykernel
