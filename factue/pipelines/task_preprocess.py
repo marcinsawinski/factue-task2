@@ -24,6 +24,7 @@ class PreprocessTask(luigi.Task):
             input_path=self.input_path,
             input_dir=self.input_dir,
             output_dir=self.output_dir,
+            output_suffix="",   
         )
         # Return a directory target instead of a file
         return luigi.LocalTarget(output_path)
@@ -35,15 +36,21 @@ class PreprocessTask(luigi.Task):
         )  # Remove suffix if any, to get base name directory
         batch_dir.mkdir(parents=True, exist_ok=True)
 
-        df = pd.read_csv(self.input_path).rename(columns=column_mapping)
-        if "post" in df.columns:
-            df[["post_lang", "post_lang_score"]] = df["post"].apply(
-                lambda x: pd.Series(detect_lang(x))
-            )
-        if "gold" in df.columns:
-            df[["gold_lang", "gold_lang_score"]] = df["gold"].apply(
-                lambda x: pd.Series(detect_lang(x))
-            )
+        try:
+            df = pd.read_csv(self.input_path).rename(columns=column_mapping)
+        except Exception as e:
+            raise RuntimeError(f"Failed to read or rename columns in {self.input_path}: {e}")
+        try:
+            if "post" in df.columns:
+                df[["post_lang", "post_lang_score"]] = df["post"].apply(
+                    lambda x: pd.Series(detect_lang(x))
+                )
+            if "gold" in df.columns:
+                df[["gold_lang", "gold_lang_score"]] = df["gold"].apply(
+                    lambda x: pd.Series(detect_lang(x))
+                )
+        except Exception as e:
+            raise RuntimeError(f"Failed to detect language for {self.input_path}: {e}")
         # Split dataframe into batches of 100 rows and save each
         
         for i, start in enumerate(range(0, len(df), self.batch_size)):

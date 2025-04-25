@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-def generate_output_path(input_path, input_dir, output_dir):
+def generate_output_path(input_path, input_dir, output_dir, output_suffix=".parquet"):
     """
     Generate the output path for the given input file.
 
@@ -20,6 +20,6 @@ def generate_output_path(input_path, input_dir, output_dir):
 
     # Generate the relative path and replace the suffix with .parquet
     relative_path = Path(input_path).relative_to(input_dir)
-    relative_path = relative_path.with_suffix(".parquet")
+    relative_path = relative_path.with_suffix(output_suffix)
     output_path = output_dir / relative_path
     return str(output_path)
