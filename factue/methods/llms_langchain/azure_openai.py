@@ -27,8 +27,6 @@ def init_azure_openai(
             openai_api_key=azure_openai_api_key,
             temperature=temperature,
             streaming=streaming,
-            max_tokens=None,
-            timeout=None,
             max_retries=max_retries,
         )
     elif mode == ModelMode.LLM:
@@ -38,8 +36,6 @@ def init_azure_openai(
             openai_api_key=azure_openai_api_key,
             temperature=temperature,
             streaming=streaming,
-            max_tokens=None,
-            timeout=None,
             max_retries=max_retries,
         )
     elif mode == ModelMode.EMBEDDINGS:
@@ -47,10 +43,6 @@ def init_azure_openai(
             azure_deployment=azure_openai_deployment,
             api_version=azure_openai_api_version,
             openai_api_key=azure_openai_api_key,
-            temperature=temperature,
-            streaming=streaming,
-            max_tokens=None,
-            timeout=None,
             max_retries=max_retries,
         )
     else:

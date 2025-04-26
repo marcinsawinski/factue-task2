@@ -45,7 +45,6 @@ def init_lms(
             base_url=base_url,
             api_key="lm-studio",
             model=model,
-            temperature=temperature,
             max_retries=max_retries,
         )
     else:

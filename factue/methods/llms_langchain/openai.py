@@ -19,12 +19,6 @@ def init_openai(
     temperature=0.0,
     max_retries=2,
 ):
-    with lms.Client() as client:
-        loaded_models = client.list_loaded_models()
-        loaded_model_names = [model.identifier for model in loaded_models]
-        if model not in loaded_model_names:
-            model = loaded_model_names[0]
-
     if mode == ModelMode.CHAT:
         return ChatOpenAI(
 
@@ -36,7 +30,6 @@ def init_openai(
         )
     elif mode == ModelMode.LLM:
         return OpenAI(
-
             api_key=openai_api_key,
             model=model,
             streaming=streaming,
@@ -47,7 +40,6 @@ def init_openai(
         return OpenAIEmbeddings(
             api_key=openai_api_key,
             model=model,
-            temperature=temperature,
             max_retries=max_retries,
         )
     else:
