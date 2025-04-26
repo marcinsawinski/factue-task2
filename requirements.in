@@ -17,3 +17,6 @@ black[jupyter]
 isort
 flake8
 mypy
+langchain_openai
+langchain_ollama
+lmstudio

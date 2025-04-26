@@ -176,3 +176,5 @@ cython_debug/
 /data
 gdrive-creds.json
 factue/models/*
+.vscode/settings.json
+models/*

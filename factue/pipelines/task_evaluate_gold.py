@@ -7,7 +7,7 @@ from .paths import generate_output_path
 
 
 class PreprocessTask(luigi.Task):
-    input_file = luigi.Parameter()
+    input_path = luigi.Parameter()
     input_dir = luigi.Parameter()
     output_dir = luigi.Parameter()
 
@@ -36,7 +36,7 @@ class PreprocessAll(luigi.WrapperTask):
         output_dir = Path("data/parquet/preprocessed")
         return [
             PreprocessTask(
-                input_file=str(input_file),
+                input_path=str(input_file),
                 input_dir=input_dir,
                 output_dir=output_dir,
             )

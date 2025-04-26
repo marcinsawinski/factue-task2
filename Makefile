@@ -42,3 +42,4 @@ lint:
 	isort factue/ 
 	flake8 factue/
 	mypy factue/
+	pyright factue/ 
