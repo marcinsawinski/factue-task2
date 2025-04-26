@@ -5,7 +5,6 @@ types-requests
 jinja2
 luigi
 ipykernel
-factue
 pyarrow
 fastparquet
 dotenv
