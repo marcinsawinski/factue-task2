@@ -38,6 +38,7 @@ test:
 
 # Lint & format code
 lint:
+	clear
 	black factue/ 
 	isort factue/ 
 	flake8 factue/

@@ -11,10 +11,9 @@ DUMMY = SecretStr("DUMMY")
 
 
 def init_vllm(base_url=VLLM_BASE_URL, model=None, streaming=False):
-    if base_url is None:
-        base_url = "http://localhost:8000/v1"  # Default vLLM endpoint
+
     if model is None:
-        response = requests.get(base_url + "/models")
+        response = requests.get(base_url + "/models")  # type: ignore
         model = str(response.json()["data"][0]["id"])
 
     return ChatOpenAI(
