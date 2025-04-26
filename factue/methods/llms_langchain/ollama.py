@@ -8,7 +8,10 @@ DEFAULT_MODEL = "llama3.2:latest"
 
 
 def init_ollama(
-    base_url=OLLAMA_BASE_URL, model=DEFAULT_MODEL, streaming=False, mode=ModelMode.CHAT
+    base_url=OLLAMA_BASE_URL,
+    model=DEFAULT_MODEL,
+    mode=ModelMode.CHAT,
+    temperature=0.0,
 ):
     url = f"{base_url}/api/tags"
     response = requests.get(url)
@@ -19,14 +22,25 @@ def init_ollama(
 
     if mode == ModelMode.CHAT:
         return ChatOllama(
-            base_url=base_url, model=model, keep_alive="30s", streaming=streaming
+            base_url=base_url,
+            model=model,
+            keep_alive="30s",
+            temperature=temperature,
+            # num_predict=100,
         )
     elif mode == ModelMode.LLM:
         return OllamaLLM(
-            base_url=base_url, model=model, keep_alive="30s", streaming=streaming
+            base_url=base_url,
+            model=model,
+            keep_alive="30s",
+            temperature=temperature,
+            # num_predict=100,
         )
     elif mode == ModelMode.EMBEDDINGS:
-        return OllamaEmbeddings(base_url=base_url, model=model)
+        return OllamaEmbeddings(
+            base_url=base_url,
+            model=model,
+        )
     else:
         raise ValueError(f"Invalid mode: {mode}")
 

@@ -1,11 +1,13 @@
 import lmstudio as lms
 import pandas as pd
 from langchain_openai import ChatOpenAI, OpenAI, OpenAIEmbeddings
+from pydantic import SecretStr
 
 from factue.methods.llms_langchain.model_mode import ModelMode
 
 LMS_BASE_URL = "http://localhost:1234/v1"
 DEFAULT_MODEL = "llama3.2:latest"
+DUMMY = SecretStr("DUMMY")
 
 
 def init_lms(
@@ -25,7 +27,7 @@ def init_lms(
     if mode == ModelMode.CHAT:
         return ChatOpenAI(
             base_url=base_url,
-            api_key="lm-studio",
+            api_key=DUMMY,
             model=model,
             streaming=streaming,
             temperature=temperature,
@@ -34,7 +36,7 @@ def init_lms(
     elif mode == ModelMode.LLM:
         return OpenAI(
             base_url=base_url,
-            api_key="lm-studio",
+            api_key=DUMMY,
             model=model,
             streaming=streaming,
             temperature=temperature,
@@ -43,7 +45,7 @@ def init_lms(
     elif mode == ModelMode.EMBEDDINGS:
         return OpenAIEmbeddings(
             base_url=base_url,
-            api_key="lm-studio",
+            api_key=DUMMY,
             model=model,
             max_retries=max_retries,
         )

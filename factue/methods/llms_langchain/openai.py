@@ -1,14 +1,15 @@
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings, OpenAI
-
-import lmstudio as lms
-import pandas as pd
-from factue.methods.llms_langchain.model_mode import ModelMode
-from dotenv import load_dotenv
 import os
 
-load_dotenv()
-openai_api_key = os.getenv('OPENAI_API_KEY')
+import pandas as pd
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI, OpenAI, OpenAIEmbeddings
+from pydantic import SecretStr
 
+from factue.methods.llms_langchain.model_mode import ModelMode
+
+load_dotenv()
+openai_api_key_str = os.getenv("OPENAI_API_KEY", "")
+openai_api_key = SecretStr(openai_api_key_str)
 DEFAULT_MODEL = "gpt-4o-mini"
 
 
@@ -21,7 +22,6 @@ def init_openai(
 ):
     if mode == ModelMode.CHAT:
         return ChatOpenAI(
-
             api_key=openai_api_key,
             model=model,
             streaming=streaming,
@@ -49,9 +49,9 @@ def init_openai(
 def get_openai_models():
     from openai import OpenAI as base_OpenAI
 
-    with base_OpenAI(api_key=openai_api_key) as client:
+    with base_OpenAI(api_key=openai_api_key_str) as client:
         models = client.models.list()
         model_dicts = [model.to_dict() for model in models]
         df = pd.json_normalize(model_dicts)
-        df['created'] = pd.to_datetime(df['created'], unit='s', utc=True)
+        df["created"] = pd.to_datetime(df["created"], unit="s", utc=True)
         return df

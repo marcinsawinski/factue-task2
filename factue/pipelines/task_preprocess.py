@@ -4,8 +4,7 @@ import luigi
 import pandas as pd
 
 from factue.methods.textual import detect_lang
-
-from .paths import generate_output_path
+from factue.utils.paths import generate_output_path
 
 column_mapping = {
     "normalized claim": "gold",
@@ -14,13 +13,13 @@ column_mapping = {
 
 
 class PreprocessTask(luigi.Task):
-    input_file = luigi.Parameter()
+    input_path = luigi.Parameter()
     input_dir = luigi.Parameter()
     output_dir = luigi.Parameter()
 
-    def output(self):
+    def output(self):  # type: ignore[override]
         output_path = generate_output_path(
-            input_file=self.input_file,
+            input_path=self.input_path,
             input_dir=self.input_dir,
             output_dir=self.output_dir,
         )
@@ -31,7 +30,7 @@ class PreprocessTask(luigi.Task):
         output_path = Path(self.output().path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
-        df = pd.read_csv(self.input_file).rename(columns=column_mapping)
+        df = pd.read_csv(self.input_path).rename(columns=column_mapping)  # type: ignore
         if "post" in df.columns:
             df[["post_lang", "post_lang_score"]] = df["post"].apply(
                 lambda x: pd.Series(detect_lang(x))
@@ -41,7 +40,7 @@ class PreprocessTask(luigi.Task):
                 lambda x: pd.Series(detect_lang(x))
             )
         df.to_parquet(output_path, index=True)
-        print(f"Converted {self.input_file} -> {output_path}")
+        print(f"Converted {self.input_path} -> {output_path}")
 
 
 class ConvertAllCSVs(luigi.WrapperTask):
@@ -50,11 +49,11 @@ class ConvertAllCSVs(luigi.WrapperTask):
         output_dir = Path("data/parquet/input")
         return [
             PreprocessTask(
-                input_file=str(input_file),
+                input_path=str(input_path),
                 input_dir=input_dir,
                 output_dir=output_dir,
             )
-            for input_file in input_dir.glob("**/*.csv")
+            for input_path in input_dir.glob("**/*.csv")
         ]
 
 
