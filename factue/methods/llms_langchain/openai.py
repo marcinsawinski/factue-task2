@@ -1,13 +1,18 @@
-from langchain_openai import ChatOpenAI, OpenAI, OpenAIEmbeddings
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings, OpenAI
+
 import lmstudio as lms
 import pandas as pd
 from factue.methods.llms_langchain.model_mode import ModelMode
+from dotenv import load_dotenv
+import os
 
-DEFAULT_MODEL = "llama3.2:latest"
+load_dotenv()
+openai_api_key = os.getenv('OPENAI_API_KEY')
+
+DEFAULT_MODEL = "gpt-4o-mini"
 
 
 def init_openai(
-    base_url=LMS_BASE_URL,
     model=DEFAULT_MODEL,
     streaming=False,
     mode=ModelMode.CHAT,
@@ -22,8 +27,8 @@ def init_openai(
 
     if mode == ModelMode.CHAT:
         return ChatOpenAI(
-            base_url=base_url,
-            api_key="lm-studio",
+
+            api_key=openai_api_key,
             model=model,
             streaming=streaming,
             temperature=temperature,
@@ -31,8 +36,8 @@ def init_openai(
         )
     elif mode == ModelMode.LLM:
         return OpenAI(
-            base_url=base_url,
-            api_key="lm-studio",
+
+            api_key=openai_api_key,
             model=model,
             streaming=streaming,
             temperature=temperature,
@@ -40,8 +45,7 @@ def init_openai(
         )
     elif mode == ModelMode.EMBEDDINGS:
         return OpenAIEmbeddings(
-            base_url=base_url,
-            api_key="lm-studio",
+            api_key=openai_api_key,
             model=model,
             temperature=temperature,
             max_retries=max_retries,
@@ -50,32 +54,12 @@ def init_openai(
         raise ValueError(f"Invalid mode: {mode}")
 
 
-def _model_to_dict(m):
-    return {
-        "type": "embedding" if isinstance(m, lms.EmbeddingModelInfo) else "llm",
-        "model_key": getattr(m, "model_key", None),
-        "display_name": getattr(m, "display_name", None),
-        "format": getattr(m, "format", None),
-        "architecture": getattr(m, "architecture", None),
-        "size_bytes": getattr(m, "size_bytes", None),
-        "path": getattr(m, "path", None),
-        "vision": getattr(m, "vision", None),
-        "trained_for_tool_use": getattr(m, "trained_for_tool_use", None),
-        "max_context_length": getattr(m, "max_context_length", None),
-        "params_string": getattr(m, "params_string", None),
-    }
+def get_openai_models():
+    from openai import OpenAI as base_OpenAI
 
-def get_models():
-
-    with lms.Client() as client:
-        downloaded_models = client.list_downloaded_models()
-        loaded_models = client.list_loaded_models()
-        loaded_model_names = [model.identifier for model in loaded_models]
-
-        downloaded_dicts = [model.__dict__.get("_data") for model in downloaded_models]
-        model_dicts = [_model_to_dict(m) for m in downloaded_dicts]
-        model_dicts = [
-            {**model, "loaded": model["model_key"] in loaded_model_names}
-            for model in model_dicts
-        ]
-        return pd.DataFrame(model_dicts)
+    with base_OpenAI(api_key=openai_api_key) as client:
+        models = client.models.list()
+        model_dicts = [model.to_dict() for model in models]
+        df = pd.json_normalize(model_dicts)
+        df['created'] = pd.to_datetime(df['created'], unit='s', utc=True)
+        return df

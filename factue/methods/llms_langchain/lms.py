@@ -1,6 +1,7 @@
-from langchain_openai import ChatOpenAI, OpenAI, OpenAIEmbeddings
 import lmstudio as lms
 import pandas as pd
+from langchain_openai import ChatOpenAI, OpenAI, OpenAIEmbeddings
+
 from factue.methods.llms_langchain.model_mode import ModelMode
 
 LMS_BASE_URL = "http://localhost:1234/v1"
@@ -65,6 +66,7 @@ def _model_to_dict(m):
         "max_context_length": getattr(m, "max_context_length", None),
         "params_string": getattr(m, "params_string", None),
     }
+
 
 def get_models():
 

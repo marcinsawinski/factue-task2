@@ -1,6 +1,7 @@
 -e .
 pandas
 pandas-stubs
+types-requests
 jinja2
 luigi
 ipykernel
@@ -17,6 +18,7 @@ black[jupyter]
 isort
 flake8
 mypy
+pyright
 langchain_openai
 langchain_ollama
 lmstudio

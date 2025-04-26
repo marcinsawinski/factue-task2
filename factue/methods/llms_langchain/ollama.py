@@ -31,7 +31,7 @@ def init_ollama(
         raise ValueError(f"Invalid mode: {mode}")
 
 
-def get_models(base_url=OLLAMA_BASE_URL):
+def get_ollama_models(base_url=OLLAMA_BASE_URL):
     url = f"{base_url}/api/tags"
     response = requests.get(url)
     models = response.json()["models"]
