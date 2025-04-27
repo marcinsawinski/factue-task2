@@ -21,3 +21,4 @@ pyright
 langchain_openai
 langchain_ollama
 lmstudio
+weave
