@@ -12,6 +12,7 @@ aiohttp==3.11.18
     # via
     #   aiohttp-retry
     #   fsspec
+    #   gql
 aiohttp-retry==2.9.1
     # via
     #   dvc-http
@@ -28,6 +29,7 @@ antlr4-python3-runtime==4.9.3
     #   omegaconf
 anyio==4.9.0
     # via
+    #   gql
     #   httpx
     #   httpx-ws
     #   lmstudio
@@ -49,7 +51,11 @@ attrs==25.3.0
     #   aiohttp
     #   dvc
     #   dvc-data
+    #   jsonschema
+    #   referencing
     #   sqltrie
+backoff==2.2.1
+    # via gql
 billiard==4.2.1
     # via celery
 black[jupyter]==25.1.0
@@ -67,6 +73,7 @@ certifi==2025.1.31
     #   httpcore
     #   httpx
     #   requests
+    #   sentry-sdk
 cffi==1.17.1
     # via
     #   cryptography
@@ -81,6 +88,7 @@ click==8.1.8
     #   click-plugins
     #   click-repl
     #   typer
+    #   wandb
 click-didyoumean==0.3.1
     # via celery
 click-plugins==1.1.1
@@ -109,12 +117,16 @@ decorator==5.2.1
 dictdiffer==0.9.0
     # via dvc-data
 diskcache==5.6.3
-    # via dvc-data
+    # via
+    #   dvc-data
+    #   weave
 distro==1.9.0
     # via
     #   dvc
     #   iterative-telemetry
     #   openai
+docker-pycreds==0.4.0
+    # via wandb
 dotenv==0.9.9
     # via -r requirements.in
 dpath==2.2.0
@@ -146,6 +158,8 @@ dvc-studio-client==0.21.0
     # via dvc
 dvc-task==0.40.2
     # via dvc
+emoji==2.14.1
+    # via weave
 entrypoints==0.4
     # via gto
 executing==2.2.0
@@ -187,7 +201,9 @@ funcy==2.0
 gitdb==4.0.12
     # via gitpython
 gitpython==3.1.44
-    # via scmrepo
+    # via
+    #   scmrepo
+    #   wandb
 google-api-core==2.24.2
     # via google-api-python-client
 google-api-python-client==2.167.0
@@ -201,8 +217,12 @@ google-auth-httplib2==0.2.0
     # via google-api-python-client
 googleapis-common-protos==1.70.0
     # via google-api-core
+gql[aiohttp,requests]==3.5.2
+    # via weave
 grandalf==0.8
     # via dvc
+graphql-core==3.2.4
+    # via gql
 gto==1.7.2
     # via dvc
 h11==0.16.0
@@ -235,7 +255,7 @@ idna==3.10
     #   httpx
     #   requests
     #   yarl
-ipykernel==6.29.5
+ipykernel[ipywidgets]==6.29.5
     # via -r requirements.in
 ipython==9.1.0
     # via
@@ -257,6 +277,10 @@ jsonpatch==1.33
     # via langchain-core
 jsonpointer==3.0.0
     # via jsonpatch
+jsonschema==4.23.0
+    # via weave
+jsonschema-specifications==2025.4.1
+    # via jsonschema
 jupyter-client==8.6.3
     # via ipykernel
 jupyter-core==5.7.2
@@ -309,7 +333,9 @@ mypy-extensions==1.1.0
     #   black
     #   mypy
 nest-asyncio==1.6.0
-    # via ipykernel
+    # via
+    #   ipykernel
+    #   weave
 networkx==3.4.2
     # via dvc
 nodeenv==1.9.1
@@ -319,6 +345,7 @@ numpy==2.2.5
     #   fastparquet
     #   pandas
     #   pandas-stubs
+    #   weave
 oauth2client==4.1.3
     # via pydrive2
 ollama==0.4.8
@@ -343,6 +370,7 @@ packaging==24.2
     #   ipykernel
     #   langchain-core
     #   langsmith
+    #   weave
 pandas==2.2.3
     # via
     #   -r requirements.in
@@ -363,6 +391,7 @@ platformdirs==4.3.7
     #   black
     #   dvc
     #   jupyter-core
+    #   wandb
 prompt-toolkit==3.0.51
     # via
     #   click-repl
@@ -378,11 +407,13 @@ protobuf==6.30.2
     #   google-api-core
     #   googleapis-common-protos
     #   proto-plus
+    #   wandb
 psutil==7.0.0
     # via
     #   dvc
     #   flufl-lock
     #   ipykernel
+    #   wandb
 ptyprocess==0.7.0
     # via pexpect
 pure-eval==0.2.3
@@ -410,6 +441,8 @@ pydantic==2.11.3
     #   langsmith
     #   ollama
     #   openai
+    #   wandb
+    #   weave
 pydantic-core==2.33.1
     # via pydantic
 pydot==3.0.4
@@ -458,10 +491,15 @@ pyyaml==6.0.2
     #   langchain-core
     #   omegaconf
     #   pydrive2
+    #   wandb
 pyzmq==26.4.0
     # via
     #   ipykernel
     #   jupyter-client
+referencing==0.36.2
+    # via
+    #   jsonschema
+    #   jsonschema-specifications
 regex==2024.11.6
     # via tiktoken
 requests==2.32.3
@@ -470,20 +508,29 @@ requests==2.32.3
     #   dvc-studio-client
     #   fast-langdetect
     #   google-api-core
+    #   gql
     #   iterative-telemetry
     #   langsmith
     #   requests-toolbelt
     #   robust-downloader
     #   tiktoken
+    #   wandb
 requests-toolbelt==1.0.0
-    # via langsmith
+    # via
+    #   gql
+    #   langsmith
 rich==14.0.0
     # via
     #   dvc
     #   gto
     #   typer
+    #   weave
 robust-downloader==0.0.2
     # via fast-langdetect
+rpds-py==0.24.0
+    # via
+    #   jsonschema
+    #   referencing
 rsa==4.9.1
     # via
     #   google-auth
@@ -500,6 +547,10 @@ scmrepo==3.3.10
     #   gto
 semver==3.0.4
     # via gto
+sentry-sdk==2.27.0
+    # via wandb
+setproctitle==1.3.5
+    # via wandb
 shellingham==1.5.4
     # via typer
 shortuuid==1.0.13
@@ -510,6 +561,7 @@ shtab==1.7.2
     # via dvc
 six==1.17.0
     # via
+    #   docker-pycreds
     #   flatten-dict
     #   oauth2client
     #   python-dateutil
@@ -531,6 +583,7 @@ tenacity==8.5.0
     # via
     #   langchain-core
     #   luigi
+    #   weave
 tiktoken==0.9.0
     # via langchain-openai
 tokenize-rt==6.1.0
@@ -576,8 +629,10 @@ typing-extensions==4.13.2
     #   pydantic
     #   pydantic-core
     #   pyright
+    #   referencing
     #   typer
     #   typing-inspection
+    #   wandb
 typing-inspection==0.4.0
     # via pydantic
 tzdata==2025.2
@@ -590,7 +645,10 @@ urllib3==2.4.0
     # via
     #   dulwich
     #   requests
+    #   sentry-sdk
     #   types-requests
+uuid-utils==0.10.0
+    # via weave
 vine==5.1.0
     # via
     #   amqp
@@ -600,12 +658,18 @@ voluptuous==0.15.2
     # via
     #   dvc
     #   dvc-studio-client
+wandb==0.19.10
+    # via weave
 wcwidth==0.2.13
     # via prompt-toolkit
+weave==0.51.44
+    # via -r requirements.in
 wsproto==1.2.0
     # via httpx-ws
 yarl==1.20.0
-    # via aiohttp
+    # via
+    #   aiohttp
+    #   gql
 zc-lockfile==3.0.post1
     # via dvc
 zstandard==0.23.0
