@@ -1,26 +1,48 @@
-.PHONY: setup update clean env run test lint pipeline
+.PHONY: setup update clean env run test lint pipeline remove register
+
+# Default path if PYTHON_ENV_PATH is not set
+PYTHON_ENV_PATH ?= .venv
+PYTHON_EXECUTABLE ?= python3
+KERNEL_NAME ?= factue
+KERNEL_DISPLAY_NAME ?= Python (MS FactUE)
 
 # Setup venv + pip-tools + editable install
 # pip-compile requirements.in --output-file=requirements.txt && 
+# Load variables from .env file if it exists
+ifneq (,$(wildcard .env))
+	include .env
+	export
+endif
+
+register:
+	python -m ipykernel install --user --name $(KERNEL_NAME) --display-name "$(KERNEL_DISPLAY_NAME)"
 
 setup:
-
-	python3 -m venv .venv
-	. .venv/bin/activate && \
+	$(PYTHON_EXECUTABLE) -m venv $(PYTHON_ENV_PATH)
+	. $(PYTHON_ENV_PATH)/bin/activate && \
 	pip install --upgrade pip pip-tools && \
+	pip-compile requirements.in && \
 	pip-sync requirements.txt && \
-	echo "Setup complete!"
+	echo "Setup complete in $(PYTHON_ENV_PATH)!"
+
+remove:
+	@if [ -d "$(shell echo $(PYTHON_ENV_PATH))" ]; then \
+		echo "Removing environment at $(shell echo $(PYTHON_ENV_PATH))"; \
+		rm -rf $(shell echo $(PYTHON_ENV_PATH)); \
+	else \
+		echo "No environment found at $(shell echo $(PYTHON_ENV_PATH))"; \
+	fi
 
 # Compile dependencies (if you're using pip-tools)
 update:
-	. .venv/bin/activate && pip-compile requirements.in --output-file=requirements.txt && \
+	. $(PYTHON_ENV_PATH)/bin/activate && pip-compile requirements.in --output-file=requirements.txt && \
 	pip-sync requirements.txt && \
 	echo "pip-tools completed!"
 
 
 # Remove the venv & build artifacts
 clean:
-	rm -rf .venv __pycache__ *.pyc build dist
+	rm -rf $(PYTHON_ENV_PATH) __pycache__ *.pyc build dist
 # Load environment (manual sourcing still needed in interactive shells)
 env:
 	. ./env.sh
