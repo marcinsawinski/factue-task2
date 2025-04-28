@@ -5,7 +5,7 @@ from langchain_openai import (AzureChatOpenAI, AzureOpenAI,
                               AzureOpenAIEmbeddings)
 from pydantic import SecretStr
 
-from factue.methods.llms_langchain.model_mode import ModelMode
+from factue.utils.types import ModelMode
 
 load_dotenv()
 azure_openai_api_key = SecretStr(os.getenv("AZURE_OPENAI_API_KEY", ""))

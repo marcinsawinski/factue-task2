@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 
 import luigi
@@ -7,12 +8,12 @@ from factue.methods.textual import detect_lang
 from factue.utils.paths import generate_output_path
 
 column_mapping = {
-    "normalized claim": "gold",
-    "post": "post",
+    "normalized claim": "reference",
+    "post": "text",
 }
 
 
-class PreprocessTask(luigi.Task):
+class PreprocessRawTask(luigi.Task):
     input_path = luigi.Parameter()
     input_dir = luigi.Parameter()
     output_dir = luigi.Parameter()
@@ -42,12 +43,12 @@ class PreprocessTask(luigi.Task):
                 f"Failed to read or rename columns in {self.input_path}: {e}"
             )
         try:
-            if "post" in df.columns:
-                df[["post_lang", "post_lang_score"]] = df["post"].apply(
+            if "text" in df.columns:
+                df[["text_lang", "text_lang_score"]] = df["text"].apply(
                     lambda x: pd.Series(detect_lang(x))
                 )
-            if "gold" in df.columns:
-                df[["gold_lang", "gold_lang_score"]] = df["gold"].apply(
+            if "reference" in df.columns:
+                df[["reference_lang", "reference_lang_score"]] = df["reference"].apply(
                     lambda x: pd.Series(detect_lang(x))
                 )
         except Exception as e:
@@ -60,21 +61,26 @@ class PreprocessTask(luigi.Task):
         print(f"Converted {self.input_path} -> {batch_dir}")
 
 
-class PreprocessAll(luigi.WrapperTask):
+class PreprocessRawTaskAll(luigi.WrapperTask):
+    lang = luigi.Parameter(default="*")
+    split = luigi.Parameter(default="*")
+
     def requires(self):
         input_dir = Path("data/00_raw_clef25")
         output_dir = Path("data/01_preprocessed")
         return [
-            PreprocessTask(
+            PreprocessRawTask(
                 input_path=str(input_path),
                 input_dir=input_dir,
                 output_dir=output_dir,
-                batch_size=100,
+                batch_size=20,
             )
-            for input_path in input_dir.glob("**/*.csv")
+            for input_path in input_dir.glob(
+                f"**/{self.split}/{self.split}-{self.lang}.csv"
+            )
         ]
 
 
 if __name__ == "__main__":
-    print("starting preprocessing")
-    luigi.run(["PreprocessAll", "--local-scheduler"])
+    args = sys.argv[1:]  # Get command line arguments
+    luigi.run(["PreprocessRawTaskAll", "--local-scheduler"] + args)

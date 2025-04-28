@@ -18,6 +18,7 @@ isort
 flake8
 mypy
 pyright
+langchain
 langchain_openai
 langchain_ollama
 lmstudio

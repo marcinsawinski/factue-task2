@@ -18,3 +18,5 @@ if not fasttetxt_model_path.exists():
 if duckdb_file_str is None:
     raise ValueError("DUCKDB_FILE environment variable is not set")
 duckdb_file = project_root / duckdb_file_str
+
+ollama_host = os.getenv("OLLAMA_HOST")

@@ -1,14 +1,16 @@
 import requests
 from langchain_ollama import ChatOllama, OllamaEmbeddings, OllamaLLM
 
-from factue.methods.llms_langchain.model_mode import ModelMode
+from factue.utils.types import ModelMode
+from factue.utils.vars import ollama_host
 
-OLLAMA_BASE_URL = "http://localhost:11434"
 DEFAULT_MODEL = "llama3.2:latest"
+
+base_url = f"http://{ollama_host}"
 
 
 def init_ollama(
-    base_url=OLLAMA_BASE_URL,
+    base_url=base_url,
     model=DEFAULT_MODEL,
     mode=ModelMode.CHAT,
     temperature=0.0,
@@ -45,7 +47,7 @@ def init_ollama(
         raise ValueError(f"Invalid mode: {mode}")
 
 
-def get_ollama_models(base_url=OLLAMA_BASE_URL):
+def get_ollama_models(base_url=base_url):
     url = f"{base_url}/api/tags"
     response = requests.get(url)
     models = response.json()["models"]

@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI, OpenAI, OpenAIEmbeddings
 from pydantic import SecretStr
 
-from factue.methods.llms_langchain.model_mode import ModelMode
+from factue.utils.types import ModelMode
 
 load_dotenv()
 openai_api_key_str = os.getenv("OPENAI_API_KEY", "")

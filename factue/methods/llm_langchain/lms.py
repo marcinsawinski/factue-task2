@@ -3,7 +3,7 @@ import pandas as pd
 from langchain_openai import ChatOpenAI, OpenAI, OpenAIEmbeddings
 from pydantic import SecretStr
 
-from factue.methods.llms_langchain.model_mode import ModelMode
+from factue.utils.types import ModelMode
 
 LMS_BASE_URL = "http://localhost:1234/v1"
 DEFAULT_MODEL = "llama3.2:latest"
