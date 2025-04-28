@@ -1,4 +1,5 @@
-.PHONY: setup update clean env run test lint pipeline remove register
+.PHONY: setup update clean env run test lint pipeline remove register ollama
+
 
 # Default path if PYTHON_ENV_PATH is not set
 PYTHON_ENV_PATH ?= .venv
@@ -66,3 +67,10 @@ lint:
 	flake8 factue/
 	mypy factue/
 	pyright factue/ 
+
+ollama:
+	@echo "Starting Ollama server ..."
+	@echo "Ollama models: $(OLLAMA_MODELS)"
+	@echo "Ollama executable: $(OLLAMA_EXECUTABLE)"
+	@echo "Ollama host: $(OLLAMA_HOST)"
+	OLLAMA_MODELS=$(OLLAMA_MODELS) $(OLLAMA_EXECUTABLE) serve 
