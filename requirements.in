@@ -21,5 +21,13 @@ pyright
 langchain
 langchain_openai
 langchain_ollama
+langchain_huggingface
+llama-cpp-python
 lmstudio
 weave
+guidance
+accelerate
+transformers
+bitsandbytes --prefer-binary
+torch
+gpustat
