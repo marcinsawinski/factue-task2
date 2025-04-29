@@ -10,7 +10,12 @@ base_url = f"http://{ollama_host}"
 
 
 def init_ollama(
-    base_url=base_url, model=DEFAULT_MODEL, mode=ModelMode.CHAT, temperature=0.0, seed=0,num_predict=1000
+    base_url=base_url,
+    model=DEFAULT_MODEL,
+    mode=ModelMode.CHAT,
+    temperature=0.0,
+    seed=-1,
+    num_predict=1000,
 ):
     url = f"{base_url}/api/tags"
     response = requests.get(url)
@@ -18,25 +23,23 @@ def init_ollama(
     model_names = [model["name"] for model in models]
     if model not in model_names:
         model = model_names[0]
-    
-    print("*"*20, temperature)
 
     if mode == ModelMode.CHAT:
         return ChatOllama(
             base_url=base_url,
             model=model,
-            keep_alive="30s",
-            temperature=temperature,
+            keep_alive="60s",
+            # temperature=temperature,
             seed=seed,
             num_predict=num_predict,
-            xxx=1,
         )
     elif mode == ModelMode.LLM:
         return OllamaLLM(
             base_url=base_url,
             model=model,
-            keep_alive="30s",
-            temperature=temperature,
+            keep_alive="60s",
+            # temperature=temperature,
+            seed=seed,
             num_predict=num_predict,
         )
     elif mode == ModelMode.EMBEDDINGS:

@@ -18,16 +18,16 @@ def make_call(llm, step_id, prompt_id, variables, max_iterations):
         messages.append(
             HumanMessagePromptTemplate.from_template(template_parts[USER_PART_NAME])
         )
-    
+
     if messages:
         prompt_template = ChatPromptTemplate.from_messages(messages)
         response = []
         for i in range(max_iterations):
             prompt = prompt_template.invoke(variables)
-            
+
             ai_msg = llm.invoke(prompt.to_messages())
             response.append(ai_msg.content.strip())
-        return response
+        return list(set(response))
     else:
         return "Error"
 

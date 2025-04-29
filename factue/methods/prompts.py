@@ -16,6 +16,7 @@ When generating a claim, it must:
 - Preserve the post’s semantic meaning; do not correct factual errors.
 - Keep numerical values intact; convert units only when necessary.
 - If the post contains too much information for one sentence, select only the most important claim.
+- Claim must be in the same language as the post ({text_lang})
 
 Output **only** the body of claim without any additional text.""",
             "user": """POST:\n{text}""",
@@ -23,7 +24,7 @@ Output **only** the body of claim without any additional text.""",
         "extract_002": {
             "system": """Write story about """,
             "user": """{text}""",
-        }
+        },
     },
     "check_task": {
         "check_001": {
