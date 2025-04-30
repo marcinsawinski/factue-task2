@@ -19,4 +19,10 @@ if duckdb_file_str is None:
     raise ValueError("DUCKDB_FILE environment variable is not set")
 duckdb_file = project_root / duckdb_file_str
 
-ollama_host = os.getenv("OLLAMA_HOST")
+ollama_hosts = {
+    "OLLAMA_HOST": os.getenv("OLLAMA_HOST"),
+    "OLLAMA_HOST0": os.getenv("OLLAMA_HOST0"),
+    "OLLAMA_HOST1": os.getenv("OLLAMA_HOST1"),
+    "OLLAMA_HOST2": os.getenv("OLLAMA_HOST2"),
+    "OLLAMA_HOST3": os.getenv("OLLAMA_HOST3"),
+}

@@ -6,4 +6,6 @@ python -m factue.pipelines.lt_llm_process \
   --split dev \
   --max-iterations 5 \
   --seed -1 \
+  --resource-type OLLAMA_HOST \
+  --resource-list 0123 \
   "$@"

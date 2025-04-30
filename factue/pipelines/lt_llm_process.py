@@ -1,3 +1,4 @@
+import logging
 import sys
 from pathlib import Path
 
@@ -16,6 +17,7 @@ class ExtractClaimTask(luigi.Task):
     output_dir = luigi.Parameter()
     identifier = luigi.Parameter()
     force = luigi.BoolParameter()
+    resource_id = luigi.Parameter(default="")
     ##
     model_name = luigi.Parameter()
     provider = luigi.Parameter()
@@ -25,6 +27,10 @@ class ExtractClaimTask(luigi.Task):
     mode = luigi.Parameter()
     temperature = luigi.FloatParameter()
     seed = luigi.IntParameter()
+
+    @property
+    def resources(self):
+        return {self.resource_id:1}
 
     def complete(self):
         if self.force:
@@ -43,13 +49,19 @@ class ExtractClaimTask(luigi.Task):
     def run(self):
         output_path = Path(self.output().path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        llm = Llm(
-            model_name=self.model_name,  # type: ignore
-            provider=self.provider,  # type: ignore
-            mode=self.mode,  # type: ignore
-            temperature=self.temperature,  # type: ignore
-            seed=self.seed,  # type: ignore
-        )
+
+        llm_params = {
+            "model_name": self.model_name,
+            "provider": self.provider,
+            "mode": self.mode,
+            "temperature": self.temperature,
+            "seed": self.seed,
+        }
+
+        if self.resource_id and self.resource_id !="NO_PARALLELISM_":
+            llm_params.update({"resource_id": self.resource_id})
+
+        llm = Llm(**llm_params)
 
         df = pd.read_parquet(str(self.input_path))
 
@@ -58,14 +70,14 @@ class ExtractClaimTask(luigi.Task):
                 llm=llm,
                 step_id=self.step_id,
                 prompt_id=self.prompt_id,
-                variables={"text": row["text"],"text_lang": row["text_lang"]},
+                variables={"text": row["text"], "text_lang": row["text_lang"]},
                 max_iterations=self.max_iterations,
             ),
             axis=1,
         )
         df["identifier"] = self.identifier
         df.to_parquet(output_path, index=True, compression="snappy")
-        print(f"Processed {self.input_path} -> {output_path}")
+        logging.info(f"Processed {self.input_path} -> {output_path}")
         self.force = False
 
 
@@ -74,6 +86,8 @@ class ExtractClaimTaskAll(luigi.WrapperTask):
     split = luigi.Parameter(default="*")
     part = luigi.Parameter(default="*")
     force = luigi.BoolParameter(default=False)
+    resource_type = luigi.Parameter(default="NO_PARALLELISM")
+    resource_list = luigi.Parameter(default="_")
 
     model_name = luigi.Parameter(default=ModelName.LLAMA_31_8B)
     provider = luigi.Parameter(default=ModelProvider.OLLAMA)
@@ -97,6 +111,7 @@ class ExtractClaimTaskAll(luigi.WrapperTask):
                 output_dir=output_dir,
                 identifier=identifier,
                 force=self.force,
+                resource_id=self.resource_type+self.resource_list[idx%len(self.resource_list)],
                 ###
                 model_name=self.model_name,
                 provider=self.provider,
@@ -107,12 +122,41 @@ class ExtractClaimTaskAll(luigi.WrapperTask):
                 temperature=self.temperature,
                 seed=self.seed,
             )
-            for input_path in input_dir.glob(
+            for idx,input_path in enumerate(input_dir.glob(
                 f"**/{self.split}/{self.split}-{self.lang}/batch_{self.part}.parquet"
-            )
+            ))
         ]
 
 
 if __name__ == "__main__":
-    args = sys.argv[1:]  # Get command line arguments
-    luigi.run(["ExtractClaimTaskAll", "--local-scheduler"] + args)
+    # Optional: adjust logging level (DEBUG, INFO, WARNING, ERROR)
+    logging.basicConfig(
+        level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+    )
+
+    # Optional: set Luigi-specific logger to DEBUG
+    logging.getLogger("luigi-interface").setLevel(logging.INFO)
+
+    args = sys.argv[1:]
+
+    resource_type = None
+    resource_list = []
+    new_args = args.copy()
+
+    logging.info(f"Provided {args}")
+    i = 0
+    while i < len(args):
+        if args[i] == "--resource-type" and i + 1 < len(args):
+            resource_type = args[i + 1]
+            i += 2
+        elif args[i] == "--resource-list" and i + 1 < len(args):
+            resource_list = args[i + 1]
+            i += 2
+        else:
+            i+=1
+
+    if resource_type and resource_list:
+        new_args.append(f"--workers={len(resource_list)}")
+    luigi_args = ["ExtractClaimTaskAll", "--local-scheduler"] + new_args
+    logging.info(f"Start Luigi as {luigi_args}")
+    luigi.run(luigi_args)

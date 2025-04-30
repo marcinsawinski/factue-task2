@@ -2,21 +2,20 @@ import requests
 from langchain_ollama import ChatOllama, OllamaEmbeddings, OllamaLLM
 
 from factue.utils.types import ModelMode
-from factue.utils.vars import ollama_host
+from factue.utils.vars import ollama_hosts
 
 DEFAULT_MODEL = "llama3.2:latest"
 
-base_url = f"http://{ollama_host}"
-
 
 def init_ollama(
-    base_url=base_url,
     model=DEFAULT_MODEL,
     mode=ModelMode.CHAT,
     temperature=0.0,
-    seed=-1,
+    seed=0,
     num_predict=1000,
+    resource_id="OLLAMA_HOST",
 ):
+    base_url = f"http://{ollama_hosts[resource_id]}"
     url = f"{base_url}/api/tags"
     response = requests.get(url)
     models = response.json()["models"]
@@ -25,7 +24,7 @@ def init_ollama(
         model = model_names[0]
 
     if mode == ModelMode.CHAT:
-        print("seed: ",seed)
+        print("seed: ", seed)
         return ChatOllama(
             base_url=base_url,
             model=model,
@@ -52,7 +51,10 @@ def init_ollama(
         raise ValueError(f"Invalid mode: {mode}")
 
 
-def get_ollama_models(base_url=base_url):
+def get_ollama_models(
+    resource_id="OLLAMA_HOST",
+):
+    base_url = f"http://{ollama_hosts[resource_id]}"
     url = f"{base_url}/api/tags"
     response = requests.get(url)
     models = response.json()["models"]
