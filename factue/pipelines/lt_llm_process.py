@@ -51,7 +51,7 @@ class ExtractClaimTask(luigi.Task):
             seed=self.seed,  # type: ignore
         )
 
-        df = pd.read_parquet(str(self.input_path)).head(2)
+        df = pd.read_parquet(str(self.input_path))
 
         df["claim"] = df.apply(
             lambda row: make_call(
