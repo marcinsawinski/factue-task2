@@ -14,6 +14,8 @@ def init_ollama(
     model=DEFAULT_MODEL,
     mode=ModelMode.CHAT,
     temperature=0.0,
+    seed=0,
+
 ):
     url = f"{base_url}/api/tags"
     response = requests.get(url)
@@ -23,11 +25,13 @@ def init_ollama(
         model = model_names[0]
 
     if mode == ModelMode.CHAT:
+        print("seed: ",seed)
         return ChatOllama(
             base_url=base_url,
             model=model,
             keep_alive="30s",
             temperature=temperature,
+            model_kwargs={"seed": seed}
             # num_predict=100,
         )
     elif mode == ModelMode.LLM:

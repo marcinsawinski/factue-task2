@@ -1,0 +1,16 @@
+# 121 124 126 https://download.pytorch.org/whl/nightly/cu126
+# pip freeze | xargs pip uninstall -y
+# pip-compile req_guid.in --output-file=req_guid.txt
+numpy==1.26.4
+ipykernel
+ipywidgets
+#torch==2.2.2
+torch
+bitsandbytes --prefer-binary
+transformers
+accelerate
+guidance
+langchain
+langchain_huggingface
+llama-cpp-python
+gpustat

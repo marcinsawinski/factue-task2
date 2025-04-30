@@ -1,5 +1,6 @@
 .PHONY: setup update clean env run test lint pipeline remove register ollama
-
+# Make ARGS everything after the first argument
+ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
 # Default path if PYTHON_ENV_PATH is not set
 PYTHON_ENV_PATH ?= .venv
@@ -68,9 +69,17 @@ lint:
 	mypy factue/
 	pyright factue/ 
 
+CUDA_DEVICES=2
+
 ollama:
 	@echo "Starting Ollama server ..."
 	@echo "Ollama models: $(OLLAMA_MODELS)"
 	@echo "Ollama executable: $(OLLAMA_EXECUTABLE)"
 	@echo "Ollama host: $(OLLAMA_HOST)"
-	OLLAMA_MODELS=$(OLLAMA_MODELS) $(OLLAMA_EXECUTABLE) serve 
+	@echo "CUDA_DEVICES: $(CUDA_DEVICES)"
+	@echo "Args: $(ARGS)"
+	@CUDA_VISIBLE_DEVICES=$(CUDA_DEVICES) $(OLLAMA_EXECUTABLE) $(ARGS)
+
+# This hack prevents make error about unknown goals
+%:
+	@:
