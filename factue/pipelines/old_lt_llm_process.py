@@ -30,7 +30,7 @@ class ExtractClaimTask(luigi.Task):
 
     @property
     def resources(self):
-        return {self.resource_id:1}
+        return {self.resource_id: 1}
 
     def complete(self):
         if self.force:
@@ -58,7 +58,7 @@ class ExtractClaimTask(luigi.Task):
             "seed": self.seed,
         }
 
-        if self.resource_id and self.resource_id !="NO_PARALLELISM_":
+        if self.resource_id and self.resource_id != "NO_PARALLELISM_":
             llm_params.update({"resource_id": self.resource_id})
 
         llm = Llm(**llm_params)
@@ -111,7 +111,8 @@ class ExtractClaimTaskAll(luigi.WrapperTask):
                 output_dir=output_dir,
                 identifier=identifier,
                 force=self.force,
-                resource_id=self.resource_type+self.resource_list[idx%len(self.resource_list)],
+                resource_id=self.resource_type
+                + self.resource_list[idx % len(self.resource_list)],
                 ###
                 model_name=self.model_name,
                 provider=self.provider,
@@ -122,9 +123,11 @@ class ExtractClaimTaskAll(luigi.WrapperTask):
                 temperature=self.temperature,
                 seed=self.seed,
             )
-            for idx,input_path in enumerate(input_dir.glob(
-                f"**/{self.split}/{self.split}-{self.lang}/batch_{self.part}.parquet"
-            ))
+            for idx, input_path in enumerate(
+                input_dir.glob(
+                    f"**/{self.split}/{self.split}-{self.lang}/batch_{self.part}.parquet"
+                )
+            )
         ]
 
 
@@ -153,7 +156,7 @@ if __name__ == "__main__":
             resource_list = args[i + 1]
             i += 2
         else:
-            i+=1
+            i += 1
 
     if resource_type and resource_list:
         new_args.append(f"--workers={len(resource_list)}")

@@ -1,10 +1,13 @@
-class ModelMode:
+from enum import Enum
+
+
+class ModelMode(Enum):
     CHAT = "chat"
     LLM = "llm"
     EMBEDDINGS = "embeddings"
 
 
-class ModelProvider:
+class ModelProvider(Enum):
     OLLAMA = "ollama"
     LMS = "lms"
     OPENAI = "openai"
@@ -12,7 +15,7 @@ class ModelProvider:
     VLLM = "vllm"
 
 
-class ModelName:
+class ModelName(Enum):
     LLAMA_31_8B = "llama3.1:8b"
     DEEPSEEK_R1_8B = "deepseek-r1:8b"
     GPT_4O_MINI = "gpt-4o-mini"

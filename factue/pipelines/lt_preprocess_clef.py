@@ -13,7 +13,7 @@ column_mapping = {
 }
 
 
-class PreprocessRawTask(luigi.Task):
+class PreprocessRawClefTask(luigi.Task):
     input_path = luigi.Parameter()
     input_dir = luigi.Parameter()
     output_dir = luigi.Parameter()
@@ -61,15 +61,15 @@ class PreprocessRawTask(luigi.Task):
         print(f"Converted {self.input_path} -> {batch_dir}")
 
 
-class PreprocessRawTaskAll(luigi.WrapperTask):
+class PreprocessRawClefTaskAll(luigi.WrapperTask):
     lang = luigi.Parameter(default="*")
     split = luigi.Parameter(default="*")
 
     def requires(self):
-        input_dir = Path("data/00_raw_clef25")
-        output_dir = Path("data/01_preprocessed")
+        input_dir = Path("data/raw/clef25")
+        output_dir = Path("data/preprocessed/clef25")
         return [
-            PreprocessRawTask(
+            PreprocessRawClefTask(
                 input_path=str(input_path),
                 input_dir=input_dir,
                 output_dir=output_dir,
@@ -83,4 +83,4 @@ class PreprocessRawTaskAll(luigi.WrapperTask):
 
 if __name__ == "__main__":
     args = sys.argv[1:]  # Get command line arguments
-    luigi.run(["PreprocessRawTaskAll", "--local-scheduler"] + args)
+    luigi.run(["PreprocessRawClefTaskAll", "--local-scheduler"] + args)

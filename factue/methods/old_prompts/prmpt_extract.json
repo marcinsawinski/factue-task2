@@ -1,0 +1,56 @@
+{
+    "layout": {
+        "v001": "{text}"
+    },
+    "task": {
+        "v001": "You are an expert data normalizer.\nYour task is to receive raw, informal text and output a formal, concise version that captures only the essential facts in a single sentence.\n- Be neutral and objective\n- Avoid subjective opinions\n- Only keep  information that has been found in original text\n- Remove any unnecessary details or embellishments\n- Do not include any personal opinions or interpretations\n- Do not add any new information that is not present in the original claim\n- Do not change the meaning of the original claim\n- Do not include any disclaimers or hedging language\n- Do not include any references to the source of the claim\n- Do not include any additional context or background information\n- Do not include any qualifiers or caveats\n- Do not include any personal anecdotes or examples\n-Do to verify the claim"
+    },
+    "output": {
+        "v001": {
+            "questions": [
+                {
+                    "id": "meaning_preserved",
+                    "answer": "true_or_false",
+                    "errors": [
+                        "error_message_if_any"
+                    ]
+                },
+                {
+                    "id": "correct_named_entities",
+                    "answer": "true_or_false",
+                    "errors": [
+                        "error_message_if_any"
+                    ]
+                },
+                {
+                    "id": "correct_numbers",
+                    "answer": "true_or_false",
+                    "errors": [
+                        "error_message_if_any"
+                    ]
+                },
+                {
+                    "id": "no_added_data",
+                    "answer": "true_or_false",
+                    "errors": [
+                        "error_message_if_any"
+                    ]
+                },
+                {
+                    "id": "no_missing_data",
+                    "answer": "true_or_false",
+                    "errors": [
+                        "error_message_if_any"
+                    ]
+                },
+                {
+                    "id": "alternative_claim_formulation",
+                    "answer": "true_or_false",
+                    "errors": [
+                        "error_message_if_any"
+                    ]
+                }
+            ]
+        }
+    }
+}
