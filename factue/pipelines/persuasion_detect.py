@@ -16,7 +16,16 @@ from factue.utils.types import Job
 
 class PersuasionDetectTask(BaseLLmTask):
     def _process_df(self, df, llm):
-        df["identifier"] = self.identifier
+        df["output_id"] = self.output_id
+        df["job"] = self.job
+        df["step"] = self.step
+        df["prompt_id"] = self.prompt_id
+        df["max_iterations"] = self.max_iterations
+        df['temperature'] = self.temperature
+        df['max_iterations'] = self.max_iterations
+        df['model_provider'] = self.model_provider
+        df['model_name'] = self.model_name
+        df['model_mode'] = self.model_mode
         metadata = load_metadata_from_template_parts(
             self.job, self.step, self.prompt_id
         )

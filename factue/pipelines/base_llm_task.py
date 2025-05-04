@@ -18,7 +18,7 @@ class BaseLLmTask(luigi.Task):
     input_path = luigi.Parameter()
     input_dir = luigi.Parameter()
     output_dir = luigi.Parameter()
-    identifier = luigi.Parameter()
+    output_id = luigi.Parameter()
     force = luigi.BoolParameter()
     resource_id = luigi.Parameter()
     ##
@@ -83,7 +83,7 @@ class BaseLLmTask(luigi.Task):
             ),
             axis=1,
         )
-        df["identifier"] = self.identifier
+        df["output_id"] = self.output_id
         return df
 
     def run(self):
@@ -115,7 +115,6 @@ class GenericBatchWrapper(luigi.WrapperTask):
 
     lang = luigi.Parameter(default="*")
     split = luigi.Parameter(default="*")
-    identifier = luigi.Parameter(default="*")
     part = luigi.Parameter(default="*")
     force = luigi.BoolParameter(default=False)
     resource_type = luigi.Parameter(default="NO_PARALLELISM")
@@ -131,7 +130,7 @@ class GenericBatchWrapper(luigi.WrapperTask):
     seed = luigi.IntParameter(default=0)
 
     def _get_output_id(self):
-        return f"{self.model_name}-{self.prompt_id}"
+        return f"{self.model_name.name}/{self.prompt_id}"
 
     def _get_input_mask(self):
         return f"{self.split}/{self.split}-{self.lang}/batch_{self.part}.parquet"
@@ -162,7 +161,7 @@ class GenericBatchWrapper(luigi.WrapperTask):
                 input_path=str(input_path),
                 input_dir=input_dir,
                 output_dir=output_dir,
-                identifier=output_id,
+                output_id=output_id,
                 force=self.force,
                 resource_id=resource_id,  # type: ignore
                 # pass along all the shared LLM params

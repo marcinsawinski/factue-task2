@@ -1,6 +1,8 @@
 import ast
 import json
 import re
+import pandas as pd
+from pandas.api.types import is_list_like
 from collections import Counter, defaultdict
 
 
@@ -20,7 +22,7 @@ def safe_json_loads(s):
     # print('block:', block)
 
     block = (
-        block.replace("null", "None").replace("false", "False").replace("true", "True")
+        block.replace("null", "None").replace("NA", "None").replace("false", "False").replace("true", "True")
     )
 
     # Try parsing the extracted block
@@ -37,9 +39,12 @@ def safe_json_loads(s):
 
 
 def most_frequent(lst):
-    if not lst:
+    if lst is None or lst is pd.NA or not hasattr(lst, "__iter__"):
         return None
-    return Counter(lst).most_common(1)[0][0]
+    cleaned = [x for x in lst if x is not None and x is not pd.NA]
+    if not cleaned:
+        return None
+    return Counter(cleaned).most_common(1)[0][0]
 
 
 # Function to parse each row and collect all keys dynamically

@@ -2,7 +2,7 @@
 
 # This script runs the lt_extract pipeline and passes any extra parameters to it
 python -m factue.pipelines.persuasion_detect \
-  --split train \
+  --split trai* \
   --max-iterations 5 \
   --seed -1 \
   --model-name LLAMA_31_8B\
@@ -10,5 +10,5 @@ python -m factue.pipelines.persuasion_detect \
   --model-mode CHAT \
   --prompt-id "attack/Questioning_the_Reputation_v001"\
   --resource-type OLLAMA_HOST \
-  --resource-list 012 \
+  --resource-list 2 \
   "$@" 
