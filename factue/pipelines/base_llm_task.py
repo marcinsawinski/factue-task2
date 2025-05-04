@@ -32,11 +32,11 @@ class BaseLLmTask(luigi.Task):
 
     temperature = luigi.FloatParameter()
     seed = luigi.IntParameter()
-    resources = {str(resource_id): 1}
+    # resources = {str(resource_id): 1}
 
-    # @property
-    # def resources(self):
-    #     return {self.resource_id: 1}
+    @property
+    def resources(self):
+        return {self.resource_id: 1}
 
     def complete(self):
         if self.force:
@@ -152,8 +152,11 @@ class GenericBatchWrapper(luigi.WrapperTask):
         output_dir = (
             Path(self.DATA_ROOT) / self.LLM_OUTPUT / self.job / self.step / output_id
         )  # type: ignore
-
-        for idx, input_path in enumerate(input_dir.glob(self._get_input_mask())):
+        input_mask = self._get_input_mask()
+        logging.info('input_mask: ',input_mask)
+        for idx, input_path in enumerate(input_dir.glob(input_mask)):
+            resource_id=self.resource_type + self.resource_list[idx % len(self.resource_list)]
+            logging.info(f'input_path:  {str(input_path)} with resource_id: {str(resource_id)}')
             yield self.task_cls(
                 # the “fixed” I/O shape
                 input_path=str(input_path),
@@ -161,8 +164,7 @@ class GenericBatchWrapper(luigi.WrapperTask):
                 output_dir=output_dir,
                 identifier=output_id,
                 force=self.force,
-                resource_id=self.resource_type
-                + self.resource_list[idx % len(self.resource_list)],  # type: ignore
+                resource_id=resource_id,  # type: ignore
                 # pass along all the shared LLM params
                 model_provider=self.model_provider,
                 model_name=self.model_name,
@@ -176,7 +178,9 @@ class GenericBatchWrapper(luigi.WrapperTask):
             )  # type: ignore
 
     def requires(self):
-        return list(self._generate_dependencies())
+        if not hasattr(self, '_cached_requires'):
+            self._cached_requires = list(self._generate_dependencies())
+        return self._cached_requires
 
 
 if __name__ == "__main__":
