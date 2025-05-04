@@ -19,6 +19,7 @@ def init_azure_openai(
     mode=ModelMode.CHAT,
     temperature=0.0,
     max_retries=2,
+    seed = 0
 ):
 
     if mode == ModelMode.CHAT:
@@ -29,6 +30,7 @@ def init_azure_openai(
             temperature=temperature,
             streaming=streaming,
             max_retries=max_retries,
+            seed=seed
         )
     elif mode == ModelMode.LLM:
         return AzureOpenAI(
@@ -38,6 +40,7 @@ def init_azure_openai(
             temperature=temperature,
             streaming=streaming,
             max_retries=max_retries,
+            seed=seed
         )
     elif mode == ModelMode.EMBEDDINGS:
         return AzureOpenAIEmbeddings(

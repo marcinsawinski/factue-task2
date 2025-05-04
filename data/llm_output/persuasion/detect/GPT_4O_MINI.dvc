@@ -1,0 +1,6 @@
+outs:
+- md5: 2c4672d201e54a15a44be7d92c93687f.dir
+  size: 131956
+  nfiles: 4
+  hash: md5
+  path: GPT_4O_MINI
