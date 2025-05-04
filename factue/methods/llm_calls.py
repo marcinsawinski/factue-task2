@@ -4,23 +4,25 @@ from langchain.prompts import (ChatPromptTemplate, HumanMessagePromptTemplate,
 
 from factue.utils.vars import PROJECT_ROOT
 
+METADATA_PART_NAME = "metadata"
 SYSTEM_PART_NAME = "system"
 USER_PART_NAME = "user"
-TECHNIQUE_PART_NAME = "technique"
+CONST_PART_NAME = "constants"
+
 PROMPTS_DIR = "prompts"
 
 
 def load_template_parts(job, step, prompt_id):
     prompt_template_file = PROJECT_ROOT / PROMPTS_DIR / job / step / prompt_id
     with open(prompt_template_file.with_suffix(".yaml"), "r") as f:
-        prompt_defs = yaml.safe_load(f)
+        template_parts = yaml.safe_load(f)
 
-    return prompt_defs
+    return template_parts
 
 
-def load_technique_from_template_parts(job, step, prompt_id):
-    prompt_defs = load_template_parts(job, step, prompt_id)
-    return prompt_defs[TECHNIQUE_PART_NAME]
+def load_metadata_from_template_parts(job, step, prompt_id):
+    template_parts = load_template_parts(job, step, prompt_id)
+    return template_parts.get(METADATA_PART_NAME, {})
 
 
 def make_call(llm, job, step, prompt_id, variables, max_iterations):
@@ -37,9 +39,11 @@ def make_call(llm, job, step, prompt_id, variables, max_iterations):
 
     if messages:
         prompt_template = ChatPromptTemplate.from_messages(messages)
+        constants = template_parts.get(CONST_PART_NAME, {})
+        placeholders = {**variables, **constants}
         response = []
         for i in range(max_iterations):
-            prompt = prompt_template.invoke(variables)
+            prompt = prompt_template.invoke(placeholders)
 
             ai_msg = llm.invoke(prompt.to_messages())
             response.append(ai_msg.content.strip())

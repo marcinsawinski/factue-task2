@@ -4,7 +4,7 @@ from pathlib import Path
 import luigi
 import pandas as pd
 
-from factue.methods.llm_calls import (load_technique_from_template_parts,
+from factue.methods.llm_calls import (load_metadata_from_template_parts,
                                       make_call)
 from factue.pipelines.base_llm_task import BaseLLmTask, GenericBatchWrapper
 from factue.utils.args import get_args
@@ -17,10 +17,11 @@ from factue.utils.types import Job
 class PersuasionDetectTask(BaseLLmTask):
     def _process_df(self, df, llm):
         df["identifier"] = self.identifier
-        technique = load_technique_from_template_parts(
+        metadata = load_metadata_from_template_parts(
             self.job, self.step, self.prompt_id
         )
-        df["technique"] = technique
+        technique = metadata.get('technique_id', 'missing_metadata')
+        df["technique_id"] = metadata
         df["raw_result"] = df.apply(
             lambda row: make_call(
                 llm=llm,
