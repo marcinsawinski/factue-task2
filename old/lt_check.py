@@ -5,7 +5,7 @@ import pandas as pd
 
 from factue.methods.llm_calls import check_claim
 from factue.methods.llm_langchain.llm import Llm
-from factue.utils.paths import generate_output_path
+from factue.utils.paths import generate_output_from_input_path
 from factue.utils.types import ModelMode, ModelName, ModelProvider
 
 
@@ -30,7 +30,7 @@ class CleanReferenceTask(luigi.Task):
         return self.output().exists()
 
     def output(self):  # type: ignore[override]
-        output_path = generate_output_path(
+        output_path = generate_output_from_input_path(
             input_path=self.input_path,
             input_dir=self.input_dir,
             output_dir=self.output_dir,

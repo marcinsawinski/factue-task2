@@ -10,7 +10,7 @@ from factue.methods.llm_calls import make_call
 from factue.methods.llm_langchain.llm import Llm
 from factue.utils.args import get_args
 from factue.utils.logger import get_logger
-from factue.utils.paths import generate_output_path
+from factue.utils.paths import generate_output_from_input_path
 from factue.utils.types import Job, ModelMode, ModelName, ModelProvider
 
 
@@ -44,7 +44,7 @@ class BaseLLmTask(luigi.Task):
         return self.output().exists()
 
     def output(self):  # type: ignore[override]
-        output_path = generate_output_path(
+        output_path = generate_output_from_input_path(
             input_path=self.input_path,
             input_dir=self.input_dir,
             output_dir=self.output_dir,
@@ -105,10 +105,10 @@ class GenericBatchWrapper(luigi.WrapperTask):
     # **THIS** is injection point:
     DATA_ROOT = "data"
     LLM_OUTPUT = "llm_output"
-    JOB = Job.NORMALIZE
 
     task_cls: Type[luigi.Task]
     input_dir: Path
+    job: Job
     step: str
 
     # batch selectors
@@ -127,7 +127,6 @@ class GenericBatchWrapper(luigi.WrapperTask):
     model_mode = luigi.EnumParameter(enum=ModelMode)
     prompt_id = luigi.Parameter()
     max_iterations = luigi.IntParameter(default=1)
-    mode = luigi.Parameter(default=ModelMode.CHAT)
     temperature = luigi.FloatParameter(default=0.0)
     seed = luigi.IntParameter(default=0)
 
@@ -136,7 +135,7 @@ class GenericBatchWrapper(luigi.WrapperTask):
 
     def _get_input_mask(self):
         return f"{self.split}/{self.split}-{self.lang}/batch_{self.part}.parquet"
-    
+
     # def _get_input_path(self):
     #     return self.input_dir / self._get_input_masek()
 
@@ -151,13 +150,8 @@ class GenericBatchWrapper(luigi.WrapperTask):
         output_id = self._get_output_id()
         input_dir = Path(self.input_dir)
         output_dir = (
-            Path(self.DATA_ROOT)
-            / self.LLM_OUTPUT
-            / self.JOB
-            / self.step
-            / self.identifier
+            Path(self.DATA_ROOT) / self.LLM_OUTPUT / self.job / self.step / output_id
         )  # type: ignore
-
 
         for idx, input_path in enumerate(input_dir.glob(self._get_input_mask())):
             yield self.task_cls(
@@ -173,7 +167,7 @@ class GenericBatchWrapper(luigi.WrapperTask):
                 model_provider=self.model_provider,
                 model_name=self.model_name,
                 model_mode=self.model_mode,
-                job=self.JOB,
+                job=self.job,
                 step=self.step,
                 prompt_id=self.prompt_id,
                 max_iterations=self.max_iterations,

@@ -1,7 +1,9 @@
 from pathlib import Path
 
 
-def generate_output_path(input_path, input_dir, output_dir, output_suffix=".parquet"):
+def generate_output_from_input_path(
+    input_path, input_dir, output_dir, output_suffix=".parquet"
+):
     """
     Generate the output path for the given input file.
 

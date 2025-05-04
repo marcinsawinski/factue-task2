@@ -5,7 +5,7 @@ import luigi
 import pandas as pd
 
 from factue.methods.textual import detect_lang
-from factue.utils.paths import generate_output_path
+from factue.utils.paths import generate_output_from_input_path
 
 column_mapping = {
     "normalized claim": "reference",
@@ -20,7 +20,7 @@ class PreprocessRawClefTask(luigi.Task):
     batch_size = luigi.IntParameter(default=100)
 
     def output(self):  # type: ignore[override]
-        output_path = generate_output_path(
+        output_path = generate_output_from_input_path(
             input_path=self.input_path,
             input_dir=self.input_dir,
             output_dir=self.output_dir,

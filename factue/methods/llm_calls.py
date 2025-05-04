@@ -6,6 +6,7 @@ from factue.utils.vars import PROJECT_ROOT
 
 SYSTEM_PART_NAME = "system"
 USER_PART_NAME = "user"
+TECHNIQUE_PART_NAME = "technique"
 PROMPTS_DIR = "prompts"
 
 
@@ -15,6 +16,11 @@ def load_template_parts(job, step, prompt_id):
         prompt_defs = yaml.safe_load(f)
 
     return prompt_defs
+
+
+def load_technique_from_template_parts(job, step, prompt_id):
+    prompt_defs = load_template_parts(job, step, prompt_id)
+    return prompt_defs[TECHNIQUE_PART_NAME]
 
 
 def make_call(llm, job, step, prompt_id, variables, max_iterations):
