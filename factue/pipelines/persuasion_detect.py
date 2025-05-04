@@ -20,8 +20,8 @@ class PersuasionDetectTask(BaseLLmTask):
         metadata = load_metadata_from_template_parts(
             self.job, self.step, self.prompt_id
         )
-        technique = metadata.get('technique_id', 'missing_metadata')
-        df["technique_id"] = metadata
+        technique_id = metadata.get('technique_id', 'missing_metadata')
+        df["technique_id"] = technique_id
         df["raw_result"] = df.apply(
             lambda row: make_call(
                 llm=llm,
@@ -37,7 +37,7 @@ class PersuasionDetectTask(BaseLLmTask):
         extracted_df = pd.DataFrame(extracted.tolist()).fillna(value=pd.NA)
         df = pd.concat([df, extracted_df], axis=1)
         df["pred"] = df["Verdict"].apply(most_frequent)
-        df["gold"] = df["labels_multi"].apply(lambda x: technique in x)
+        df["gold"] = df["labels_multi"].apply(lambda x: technique_id in x)
 
         return df
 
