@@ -1,14 +1,24 @@
+import yaml
 from langchain.prompts import (ChatPromptTemplate, HumanMessagePromptTemplate,
                                SystemMessagePromptTemplate)
 
-from factue.methods.prompts import template_lib
+from factue.utils.vars import PROJECT_ROOT
 
 SYSTEM_PART_NAME = "system"
 USER_PART_NAME = "user"
+PROMPTS_DIR = "prompts"
 
 
-def make_call(llm, step_id, prompt_id, variables, max_iterations):
-    template_parts = template_lib[step_id][prompt_id]
+def load_template_parts(job, step, prompt_id):
+    prompt_template_file = PROJECT_ROOT / PROMPTS_DIR / job / step / prompt_id
+    with open(prompt_template_file.with_suffix(".yaml"), "r") as f:
+        prompt_defs = yaml.safe_load(f)
+
+    return prompt_defs
+
+
+def make_call(llm, job, step, prompt_id, variables, max_iterations):
+    template_parts = load_template_parts(job, step, prompt_id)
     messages = []
     if SYSTEM_PART_NAME in template_parts:
         messages.append(

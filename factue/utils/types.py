@@ -1,13 +1,18 @@
 from enum import Enum
 
 
-class ModelMode(Enum):
+class Job(str, Enum):
+    PERSUASION = "persuasion"
+    NORMALIZE = "normalize"
+
+
+class ModelMode(str, Enum):
     CHAT = "chat"
     LLM = "llm"
     EMBEDDINGS = "embeddings"
 
 
-class ModelProvider(Enum):
+class ModelProvider(str, Enum):
     OLLAMA = "ollama"
     LMS = "lms"
     OPENAI = "openai"
@@ -15,7 +20,7 @@ class ModelProvider(Enum):
     VLLM = "vllm"
 
 
-class ModelName(Enum):
+class ModelName(str, Enum):
     LLAMA_31_8B = "llama3.1:8b"
     DEEPSEEK_R1_8B = "deepseek-r1:8b"
     GPT_4O_MINI = "gpt-4o-mini"

@@ -1,6 +1,7 @@
 import logging
 import sys
 from pathlib import Path
+from typing import Type
 
 import luigi
 import pandas as pd
@@ -10,7 +11,7 @@ from factue.methods.llm_langchain.llm import Llm
 from factue.utils.args import get_args
 from factue.utils.logger import get_logger
 from factue.utils.paths import generate_output_path
-from factue.utils.types import ModelMode, ModelName, ModelProvider
+from factue.utils.types import Job, ModelMode, ModelName, ModelProvider
 
 
 class BaseLLmTask(luigi.Task):
@@ -21,18 +22,21 @@ class BaseLLmTask(luigi.Task):
     force = luigi.BoolParameter()
     resource_id = luigi.Parameter()
     ##
+    model_provider = luigi.Parameter()
     model_name = luigi.Parameter()
-    provider = luigi.Parameter()
-    step_id = luigi.Parameter()
+    model_mode = luigi.Parameter()
+    job = luigi.Parameter()
+    step = luigi.Parameter()
     prompt_id = luigi.Parameter()
     max_iterations = luigi.IntParameter()
-    mode = luigi.Parameter()
+
     temperature = luigi.FloatParameter()
     seed = luigi.IntParameter()
+    resources = {str(resource_id): 1}
 
-    @property
-    def resources(self):
-        return {self.resource_id: 1}
+    # @property
+    # def resources(self):
+    #     return {self.resource_id: 1}
 
     def complete(self):
         if self.force:
@@ -48,16 +52,16 @@ class BaseLLmTask(luigi.Task):
 
         return luigi.LocalTarget(output_path)
 
-    def _generate_output_path(self) -> str:
+    def _generate_output_path(self) -> Path:
         output_path = Path(self.output().path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         return output_path
 
-    def _generate_llm(self) -> str:
+    def _generate_llm(self) -> Llm:
         llm_params = {
             "model_name": self.model_name,
-            "provider": self.provider,
-            "mode": self.mode,
+            "model_provider": self.model_provider,
+            "model_mode": self.model_mode,
             "temperature": self.temperature,
             "seed": self.seed,
         }
@@ -65,13 +69,14 @@ class BaseLLmTask(luigi.Task):
         if self.resource_id and self.resource_id != "NO_PARALLELISM_":
             llm_params.update({"resource_id": self.resource_id})
 
-        return Llm(**llm_params)
+        return Llm(**llm_params)  # type: ignore
 
     def _process_df(self, df, llm):
         df["result"] = df.apply(
             lambda row: make_call(
                 llm=llm,
-                step_id=self.step_id,
+                job=self.job,
+                step=self.step,
                 prompt_id=self.prompt_id,
                 variables={"text": row["text"], "text_lang": row["text_lang"]},
                 max_iterations=self.max_iterations,
@@ -98,10 +103,13 @@ class GenericBatchWrapper(luigi.WrapperTask):
     """
 
     # **THIS** is injection point:
-    DATA = "data"
-    task_cls = None  # ← subclasses must set this to a Luigi Task subclass
-    input_dir = None
-    step_id = None
+    DATA_ROOT = "data"
+    LLM_OUTPUT = "llm_output"
+    JOB = Job.NORMALIZE
+
+    task_cls: Type[luigi.Task]
+    input_dir: Path
+    step: str
 
     # batch selectors
 
@@ -127,19 +135,29 @@ class GenericBatchWrapper(luigi.WrapperTask):
         return f"{self.model_name}-{self.prompt_id}"
 
     def _get_input_mask(self):
-        return f"{self.DATA}/{self.split}/{self.split}-{self.lang}/batch_{self.part}.parquet"
+        return f"{self.split}/{self.split}-{self.lang}/batch_{self.part}.parquet"
+    
+    # def _get_input_path(self):
+    #     return self.input_dir / self._get_input_masek()
 
-    def requires(self):
+    def _generate_dependencies(self):
         if self.task_cls is None:
             raise RuntimeError("`task_cls` must be set on the wrapper subclass")
-        if self.step_id is None:
-            raise RuntimeError("`step_id` must be set on the wrapper subclass")
+        if self.step is None:
+            raise RuntimeError("`step` must be set on the wrapper subclass")
         if self.input_dir is None:
             raise RuntimeError("`input_dir` must be set on the wrapper subclass")
 
         output_id = self._get_output_id()
         input_dir = Path(self.input_dir)
-        output_dir = Path(self.DATA) / self.step_id / self.version / self.identifier
+        output_dir = (
+            Path(self.DATA_ROOT)
+            / self.LLM_OUTPUT
+            / self.JOB
+            / self.step
+            / self.identifier
+        )  # type: ignore
+
 
         for idx, input_path in enumerate(input_dir.glob(self._get_input_mask())):
             yield self.task_cls(
@@ -150,17 +168,21 @@ class GenericBatchWrapper(luigi.WrapperTask):
                 identifier=output_id,
                 force=self.force,
                 resource_id=self.resource_type
-                + self.resource_list[idx % len(self.resource_list)],
+                + self.resource_list[idx % len(self.resource_list)],  # type: ignore
                 # pass along all the shared LLM params
+                model_provider=self.model_provider,
                 model_name=self.model_name,
-                provider=self.provider,
-                step_id=self.step_id,
+                model_mode=self.model_mode,
+                job=self.JOB,
+                step=self.step,
                 prompt_id=self.prompt_id,
                 max_iterations=self.max_iterations,
-                mode=self.mode,
                 temperature=self.temperature,
                 seed=self.seed,
-            )
+            )  # type: ignore
+
+    def requires(self):
+        return list(self._generate_dependencies())
 
 
 if __name__ == "__main__":

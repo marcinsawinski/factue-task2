@@ -5,11 +5,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-project_root = Path(os.getenv("PROJECT_ROOT", "."))
+PROJECT_ROOT = Path(os.getenv("PROJECT_ROOT", "."))
 duckdb_file_str = os.getenv("DUCKDB_FILE")
 
 
-fasttetxt_model_path = project_root / "models" / "lid.176.bin"
+fasttetxt_model_path = PROJECT_ROOT / "models" / "lid.176.bin"
 
 if not fasttetxt_model_path.exists():
     err = f"FastText model not found at {fasttetxt_model_path}"
@@ -17,7 +17,7 @@ if not fasttetxt_model_path.exists():
 
 if duckdb_file_str is None:
     raise ValueError("DUCKDB_FILE environment variable is not set")
-duckdb_file = project_root / duckdb_file_str
+duckdb_file = PROJECT_ROOT / duckdb_file_str
 
 ollama_hosts = {
     "OLLAMA_HOST": os.getenv("OLLAMA_HOST"),

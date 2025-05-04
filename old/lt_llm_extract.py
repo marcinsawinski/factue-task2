@@ -1,10 +1,12 @@
 import sys
-import luigi
 from pathlib import Path
-from factue.pipelines.lt_llm_base import BaseLLmTask, GenericBatchWrapper
+
+import luigi
+
+from factue.methods.llm_calls import make_call
+from factue.pipelines.base_llm_task import BaseLLmTask, GenericBatchWrapper
 from factue.utils.args import get_args
 from factue.utils.logger import get_logger
-from factue.methods.llm_calls import make_call
 
 
 class ExtractClaimTask(BaseLLmTask):
@@ -23,13 +25,11 @@ class ExtractClaimTask(BaseLLmTask):
         return df
 
 
-
 class ExtractClaimWrapper(GenericBatchWrapper):
 
     task_cls = ExtractClaimTask  # ← subclasses must set this to a Luigi Task subclass
     input_dir = Path("data/01_preprocessed")
-    step_id = 'extract'
-
+    step_id = "extract"
 
     def _get_output_id(self):
         return f"{self.model_name}-{self.prompt_id}"
