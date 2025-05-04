@@ -1,0 +1,6 @@
+outs:
+- md5: ae7b90230d63eff00951a29bd55dac33.dir
+  size: 31015879
+  nfiles: 1211
+  hash: md5
+  path: normalization

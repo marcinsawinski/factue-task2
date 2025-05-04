@@ -173,7 +173,6 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 .venv/*
-/data
 gdrive-creds.json
 factue/models/*
 .vscode/settings.json

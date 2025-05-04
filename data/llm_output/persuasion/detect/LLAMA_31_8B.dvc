@@ -1,0 +1,6 @@
+outs:
+- md5: ec709baa2bd81d7ac460578615617b3a.dir
+  size: 5144366
+  nfiles: 110
+  hash: md5
+  path: LLAMA_31_8B
