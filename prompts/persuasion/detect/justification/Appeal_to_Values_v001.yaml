@@ -8,7 +8,7 @@ system: |-
   - Description - describe if and how {technique_name} technique was used.
   - Verdict - output value True if {technique_name} technique was detected and False otherwise.
 
-  {technique_name}: 
+  {technique_name}: {technique_desc}
   
   Do not add any other information in the output. Output **only** valid JSON.  
 user: |-
