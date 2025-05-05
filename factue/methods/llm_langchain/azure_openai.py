@@ -19,7 +19,8 @@ def init_azure_openai(
     mode=ModelMode.CHAT,
     temperature=0.0,
     max_retries=2,
-    seed = 0
+    seed = 0,
+    resource_id = None, #TODO alterative endpoints ?
 ):
 
     if mode == ModelMode.CHAT:

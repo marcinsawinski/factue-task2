@@ -3,6 +3,9 @@ from langchain.prompts import (ChatPromptTemplate, HumanMessagePromptTemplate,
                                SystemMessagePromptTemplate)
 
 from factue.utils.vars import PROJECT_ROOT
+from factue.utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 METADATA_PART_NAME = "metadata"
 SYSTEM_PART_NAME = "system"
@@ -10,6 +13,7 @@ USER_PART_NAME = "user"
 CONST_PART_NAME = "constants"
 
 PROMPTS_DIR = "prompts"
+
 
 
 def load_template_parts(job, step, prompt_id):
@@ -26,6 +30,7 @@ def load_metadata_from_template_parts(job, step, prompt_id):
 
 
 def make_call(llm, job, step, prompt_id, variables, max_iterations):
+    
     template_parts = load_template_parts(job, step, prompt_id)
     messages = []
     if SYSTEM_PART_NAME in template_parts:
@@ -42,11 +47,27 @@ def make_call(llm, job, step, prompt_id, variables, max_iterations):
         constants = template_parts.get(CONST_PART_NAME, {})
         placeholders = {**variables, **constants}
         response = []
-        for i in range(max_iterations):
-            prompt = prompt_template.invoke(placeholders)
 
-            ai_msg = llm.invoke(prompt.to_messages())
-            response.append(ai_msg.content.strip())
-        return list(set(response))
+        for i in range(max_iterations):
+            try:
+                prompt = prompt_template.invoke(placeholders)
+                ai_msg = llm.invoke(prompt.to_messages())
+                response.append(ai_msg.content.strip())
+            except Exception as e:
+                # If e has a .response object (e.g., from requests or aiohttp), try extracting JSON
+                try:
+                    if hasattr(e, "response"):
+                        error_json = e.response.json()  # or await e.response.json() if async
+                        error_details = error_json.get("error", {})
+                        if error_details.get("code") == "content_filter":
+                            logger.warning(f"Filtered: {error_details}")
+                            return ["FILTERED"]
+                except Exception as json_err:
+                    logger.warning(f"Could not parse error response JSON: {json_err}")
+
+                logger.exception("Unhandled exception during LLM call")
+                return ["ERROR"]
+
+        return response if response else ["EMPTY"]
     else:
-        return "Error"
+        return ["INVALID_TEMPLATE"]
