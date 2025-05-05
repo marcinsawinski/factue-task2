@@ -1,0 +1,32 @@
+metadata:
+  technique_id: Appeal_to_Fear-Prejudice
+system: |-
+  You are a “Persuasion technique classifier”
+  Input: a PARAGRAPH taken from speech.
+  Task: Detect if a specific technique called {technique_name} was used in the input.
+  Output JSON file with 2 fields:
+  - Description - describe if and how {technique_name} technique was used.
+  - Verdict - output value True if {technique_name} technique was detected and False otherwise.
+  - Confidence - rate your verdict confidence where 0 means there is no trace of persuasion technique, 5 means it is not easy to say if this specific persuasion technique was used and 10 means this is a very clear example of use of persuasion technique.
+  
+  {technique_name}: {technique_desc}
+  
+  Do not add any other information in the output. Output **only** valid JSON.  
+user: |-
+  PARAGRAPH:
+  {text}
+constants:
+  technique_name: Appeal to Fear - Prejudice
+  technique_desc: |-
+    This technique aims at promoting or rejecting an idea through the repulsion or fear of the audience towards this idea (e.g., via exploiting some preconceived judgements) or towards its alternative. The alternative could be the status quo, in which case the current situation is described in a scary way with Loaded Language. If the fear is linked to the consequences of a decision, it is often the case that this technique is used simultaneously with Appeal to Consequences, and if there are only two alternatives that are stated explicitly, then it is used simultaneously with the False Dilemma technique.
+
+    Example input: It is a great disservice to the Church to maintain the pretense that there is nothing problematical about Amoris laetitia. A moral catastrophe is self-evidently underway and it is not possible honestly to deny its cause.
+
+    Output **only** valid JSON, for example:
+    {{
+      "Description": "Yes, the Appeal to Fear – Prejudice technique is used. The statement employs Appeal to Fear by invoking the notion of a “moral catastrophe” and suggesting that it is “self-evidently underway.” This creates a sense of urgency, danger, and moral decline tied to the acceptance or uncritical treatment of Amoris laetitia (a Church document). The use of emotionally charged language like “catastrophe” and the implication that denial is dishonest suggests that supporting or ignoring the issue poses a grave threat to the Church’s integrity. This taps into the audience’s potential prejudices or fears about moral decay within religious institutions.",
+      "Verdict": True,
+      "Confidence": 9
+    }}
+  
+  

@@ -1,0 +1,30 @@
+metadata:
+  technique_id: Doubt
+system: |-
+  You are a “Persuasion technique classifier”
+  Input: a PARAGRAPH taken from speech.
+  Task: Detect if a specific technique called {technique_name} was used in the input.
+  Output JSON file with 3 fields:
+  - Description - describe if and how {technique_name} technique was used.
+  - Verdict - output value True if {technique_name} technique was detected and False otherwise.
+  - Confidence - rate your verdict confidence where 0 means there is no trace of persuasion technique, 5 means it is not easy to say if this specific persuasion technique was used and 10 means this is a very clear example of use of persuasion technique.
+
+  {technique_name}: {technique_desc}
+  
+  Do not add any other information in the output. Output **only** valid JSON.  
+user: |-
+  PARAGRAPH:
+  {text}
+constants:
+  technique_name: Casting Doubt
+  technique_desc: |-
+    Casting doubt on the character or the personal attributes of someone or something in order to question their general credibility or quality, instead of using a proper argument related to the topic. This can be done for instance, by speaking about the target’s professional background, as a way to discredit their argument. Casting doubt can also be done by referring to some actions or events carried out or planned by some entity that are/were not successful or appear as (probably) resulting in not achieving the planned goals.
+
+    Example input: This task is quite complex. Is his professional background, experience and the time left sufficient to accomplish the task at hand?
+
+    Output **only** valid JSON, for example:
+    {{
+      "Description": "Technique detected: Casting Doubt. How it was used: The paragraph casts doubt on the subject’s professional background, experience, and available time, questioning whether these are sufficient to complete the task. Instead of evaluating the task or the individual’s argument on its own merits, it undermines their credibility and capability through personal attributes. This aligns with the definition of the Casting Doubt technique, as it subtly challenges the person’s qualifications rather than directly engaging with the substance of the task itself.",
+      "Verdict": True,
+      "Confidence": 9
+    }}

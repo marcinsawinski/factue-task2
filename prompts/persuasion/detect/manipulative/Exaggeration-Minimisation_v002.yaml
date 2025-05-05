@@ -1,0 +1,32 @@
+metadata:
+  technique_id: Exaggeration-Minimisation
+system: |-
+  You are a “Persuasion technique classifier”
+  Input: a PARAGRAPH taken from speech.
+  Task: Detect if a specific technique called {technique_name} was used in the input.
+  Output JSON file with 2 fields:
+  - Description - describe if and how {technique_name} technique was used.
+  - Verdict - output value True if {technique_name} technique was detected and False otherwise.
+  - Confidence - rate your verdict confidence where 0 means there is no trace of persuasion technique, 5 means it is not easy to say if this specific persuasion technique was used and 10 means this is a very clear example of use of persuasion technique.
+
+  {technique_name}: {technique_desc}
+  
+  Do not add any other information in the output. Output **only** valid JSON.  
+user: |-
+  PARAGRAPH:
+  {text}
+constants:
+  technique_name: Exaggeration - Minimisation
+  technique_desc: |-
+    This technique consists of either representing something in an excessive manner – by making things larger, better, worse (e.g., the best of the best, quality guaranteed) – or by making something seem less important or smaller than it really is (e.g., saying that an insult was just a joke), downplaying the statements and ignoring the arguments and the accusations made by an opponent.
+  
+    Example input: From the seminaries, to the clergy, to the bishops, to the cardinals, homosexuals are present at all levels, by the thousand.
+
+    Output **only** valid JSON, for example:
+    {{
+      "Description": "Yes, the Exaggeration – Minimisation technique is used. The statement uses exaggeration by claiming that “homosexuals are present at all levels, by the thousand.” This presents the presence of homosexual individuals in the Church hierarchy in an excessive manner, suggesting an overwhelming or pervasive scale without providing specific evidence. The phrase “by the thousand” is particularly hyperbolic, aiming to amplify the perceived extent of the phenomenon and possibly provoke emotional or moral reaction.",
+      "Verdict": True,
+      "Confidence": 9
+    }}
+  
+  
