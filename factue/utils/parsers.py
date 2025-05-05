@@ -37,6 +37,54 @@ def safe_json_loads(s):
             # print('give up')
             return {}
 
+def extract_think_and_json(text):
+    result = {
+        "think_content": None,
+        "json_data": None,
+    }
+
+    # Extract content between <think> and </think>
+    think_match = re.search(r"<think>(.*?)</think>", text, re.DOTALL)
+    if think_match:
+        result["think_content"] = think_match.group(1).strip()
+
+    # Extract everything after </think>
+    after_think_match = re.search(r"</think>(.*)", text, re.DOTALL)
+    if after_think_match:
+        after_think = after_think_match.group(1).strip()
+    else:
+        # If no </think>, maybe no <think> tag at all
+        after_think = text.strip()
+
+    # print("--- After </think> ---")
+    # print(after_think)
+
+    # Try to extract JSON inside ```json ... ```
+    json_block_match = re.search(r"```json\s*(\{[\s\S]*?\})\s*```", after_think)
+    if json_block_match:
+        json_str = json_block_match.group(1)
+        # print("--- Found JSON in code block ---")
+        # print(json_str)
+        try:
+            result["json_data"] = safe_json_loads(json_str)
+            return result
+        except json.JSONDecodeError as e:
+            pass
+            # print("JSONDecodeError in code block:", e)
+
+    # Fallback: try to extract raw JSON object
+    json_fallback_match = re.search(r"(\{[\s\S]*\})", after_think)
+    if json_fallback_match:
+        json_str = json_fallback_match.group(1)
+        # print("--- Found raw JSON ---")
+        # print(json_str)
+        try:
+            result["json_data"] = safe_json_loads(json_str)
+        except json.JSONDecodeError as e:
+            pass
+            # print("JSONDecodeError in fallback:", e)
+
+    return result
 
 def most_frequent(lst):
     if lst is None or lst is pd.NA or not hasattr(lst, "__iter__"):
@@ -51,7 +99,8 @@ def most_frequent(lst):
 def extract_all_fields_from_list_of_json_strings(list_of_json_strings):
     result = defaultdict(list)
     for s in list_of_json_strings:
-        d = safe_json_loads(s)
-        for k in d:
+        d = extract_think_and_json(s)
+        result['think_content'].append(d['think_content'])
+        for k in d['json_data']:
             result[k].append(d[k])
     return dict(result)
