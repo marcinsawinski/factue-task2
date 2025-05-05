@@ -8,10 +8,12 @@ from factue.methods.llm_calls import (load_metadata_from_template_parts,
                                       make_call)
 from factue.pipelines.base_llm_task import BaseLLmTask, GenericBatchWrapper
 from factue.utils.args import get_args
-from factue.utils.logger import get_logger
 from factue.utils.parsers import (extract_all_fields_from_list_of_json_strings,
                                   most_frequent)
 from factue.utils.types import Job
+from factue.utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class PersuasionDetectTask(BaseLLmTask):
@@ -62,6 +64,6 @@ class PersuasionDetectWrapper(GenericBatchWrapper):
 
 
 if __name__ == "__main__":
-    get_logger()
+    logger = get_logger(__name__)
     args = get_args(sys.argv[1:], wrapper="PersuasionDetectWrapper")
     luigi.run(args)

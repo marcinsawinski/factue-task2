@@ -10,6 +10,6 @@ python -m factue.pipelines.persuasion_detect \
   --model-provider OLLAMA \
   --model-mode CHAT \
   --prompt-id "justification/Appeal_to_Values_v001"\
-  --part 0000 \
+  --part 0001 \
   --lang pl \
   "$@" 
