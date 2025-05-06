@@ -49,8 +49,8 @@ class PersuasionDetectTask(BaseLLmTask):
             df['verdict'] = df['verdict'].apply(normalize_binary_list)
             df["pred"] = df["verdict"].apply(most_frequent)
 
-        if "labels_multi" in df.columns:
-            df["gold"] = df["labels_multi"].apply(lambda x: self.prompt_name in x).apply(normalize_binary_list)
+        if "label_multi" in df.columns:
+            df["gold"] = df["label_multi"].apply(lambda x: self.prompt_name in x).apply(normalize_binary_list)
 
         return df
 

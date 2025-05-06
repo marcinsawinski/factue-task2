@@ -136,7 +136,7 @@ class GenericBatchWrapper(luigi.WrapperTask):
         return f"{self.model_name.name}/{self.prompt_version}/{self.prompt_name}"
 
     def _get_input_mask(self):
-        return f"{self.split}/{self.split}-{self.lang}/batch_{self.part}.parquet"
+        return f"{self.split}/{self.lang}/*part_{self.part}.parquet"
 
     # def _get_input_path(self):
     #     return self.input_dir / self._get_input_masek()

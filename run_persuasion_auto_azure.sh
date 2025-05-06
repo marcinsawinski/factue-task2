@@ -21,7 +21,7 @@ for prompt_id in "${prompt_ids[@]}"; do
   python -m factue.pipelines.persuasion_detect \
     --prompt-name "$prompt_id" \
     --prompt-version v001 \
-    --split train \
+    --split dev \
     --max-iterations 1 \
     --seed 0 \
     --model-name GPT_4O_MINI \
