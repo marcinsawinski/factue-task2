@@ -178,3 +178,4 @@ factue/models/*
 .vscode/settings.json
 models/*
 old/*
+data/*
