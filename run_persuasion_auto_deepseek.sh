@@ -20,14 +20,12 @@ find "$BASE_PATH" -type f -name "*v001.yaml" | while read -r file; do
     echo "**************************************************"
     python -m factue.pipelines.persuasion_detect \
     --prompt-id "$prompt_id" \
-    --split train \
-    --max-iterations 1 \
+    --split trial \
+    --max-iterations 5 \
     --seed -1 \
-    --model-name LLAMA_32_3B \
+    --model-name DEEPSEEK_R1_8B \
     --model-provider OLLAMA \
     --model-mode CHAT \
     --resource-type OLLAMA_HOST \
-    --resource-list 02 \
-    --part 0000 \
-    --lang pl 
+    --resource-list 0123 
 done

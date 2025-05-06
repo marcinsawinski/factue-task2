@@ -3,7 +3,7 @@ from enum import Enum
 
 class Job(str, Enum):
     PERSUASION = "persuasion"
-    NORMALIZE = "normalize"
+    NORMALIZATION = "normalization"
 
 
 class ModelMode(str, Enum):
@@ -22,6 +22,10 @@ class ModelProvider(str, Enum):
 
 class ModelName(str, Enum):
     LLAMA_31_8B = "llama3.1:8b"
+    LLAMA_32_3B = "llama3.2:3b"
+    LLAMA_32_3B_Q4KM = "llama3.2:3b-instruct-q4_K_M"
+    LLAMA_32_3B_Q8 = "llama3.2:3b-instruct-q8_0"
+    LLAMA_PLLUM_8B = "antoniprzybylik/llama-pllum:8b"
     DEEPSEEK_R1_8B = "deepseek-r1:8b"
     GPT_4O_MINI = "gpt-4o-mini"
     DEFAULT = "deafault"

@@ -22,7 +22,5 @@ constants:
     Example input: Fascist Anti-Vax Riot Sparks COVID Outbreak in Australia.
 
     Output **only** valid JSON, for example:
-    {{
-      "Description": "Technique used: Yes — Name Calling / Labeling is present.The phrase “Fascist Anti-Vax Riot” is a textbook example of the Name Calling - Labeling technique: Fascist is a highly charged, negative political label that evokes fear, authoritarianism, and oppression. Anti-Vax is another label that places the group within a controversial and socially divisive category.The combination of these terms in a nominal group (without presenting evidence or argumentation) reduces the subject to a hostile identity. Rather than objectively describing the participants or explaining their motivations, the sentence uses loaded labels to provoke emotional judgment in the reader and frame the event and people involved negatively from the outset. This is manipulative wording aimed at shaping perception without argument.",
-      "Verdict": True,
-    }}
+    {"Description": "Technique used: Yes — Name Calling / Labeling is present.The phrase “Fascist Anti-Vax Riot” is a textbook example of the Name Calling - Labeling technique: Fascist is a highly charged, negative political label that evokes fear, authoritarianism, and oppression. Anti-Vax is another label that places the group within a controversial and socially divisive category.The combination of these terms in a nominal group (without presenting evidence or argumentation) reduces the subject to a hostile identity. Rather than objectively describing the participants or explaining their motivations, the sentence uses loaded labels to provoke emotional judgment in the reader and frame the event and people involved negatively from the outset. This is manipulative wording aimed at shaping perception without argument.",
+      "Verdict": true}
