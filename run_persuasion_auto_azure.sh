@@ -19,7 +19,8 @@ for prompt_id in "${prompt_ids[@]}"; do
   echo "**************************************************"
 
   python -m factue.pipelines.persuasion_detect \
-    --prompt-id "$prompt_id" \
+    --prompt-name "$prompt_id" \
+    --prompt-version v001 \
     --split train \
     --max-iterations 1 \
     --seed 0 \
@@ -27,7 +28,7 @@ for prompt_id in "${prompt_ids[@]}"; do
     --model-provider AZURE_OPENAI \
     --model-mode CHAT \
     --part 0000 \
-    --lang * 
+    --lang "*" 
 done
 
 # --resource-type OLLAMA_HOST \

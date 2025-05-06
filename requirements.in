@@ -32,3 +32,4 @@ bitsandbytes --prefer-binary
 torch
 gpustat
 types-PyYAML
+demjson3
