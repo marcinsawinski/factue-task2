@@ -27,7 +27,7 @@ for prompt_id in "${prompt_ids[@]}"; do
     --model-name GPT_4O_MINI \
     --model-provider AZURE_OPENAI \
     --model-mode CHAT \
-    --part 0000 \
+    --part "*" \
     --lang "*" 
 done
 
