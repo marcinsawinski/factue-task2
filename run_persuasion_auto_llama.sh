@@ -20,16 +20,17 @@ for prompt_id in "${prompt_ids[@]}"; do
 
   python -m factue.pipelines.persuasion_detect \
     --prompt-id "$prompt_id" \
+    --prompt-version v001 \
     --split train \
-    --max-iterations 1 \
+    --max-iterations 5 \
     --seed -1 \
-    --model-name LLAMA_32_3B \
+    --model-name LLAMA_31_8B \
     --model-provider OLLAMA \
     --model-mode CHAT \
-    --part 000* \
-    --lang * \
+    --part 0000 \
+    --lang "*" \
     --resource-type OLLAMA_HOST \
-    --resource-list 2 
+    --resource-list 0123 
 done
 
 # --resource-type OLLAMA_HOST \
