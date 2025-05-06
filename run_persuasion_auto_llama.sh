@@ -19,7 +19,7 @@ for prompt_id in "${prompt_ids[@]}"; do
   echo "**************************************************"
 
   python -m factue.pipelines.persuasion_detect \
-    --prompt-id "$prompt_id" \
+    --prompt-name "$prompt_id" \
     --prompt-version v001 \
     --split train \
     --max-iterations 5 \
