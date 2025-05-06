@@ -1,0 +1,80 @@
+# attack
+Name_Calling-Labeling:
+  technique_name: Name Calling - Labeling
+  technique_desc: |-
+    a form of argument in which loaded labels are directed at an individual or a group, typically in an insulting or demeaning way. Labelling an object as either something the target audience fears, hates, or on the contrary finds desirable or loves. This technique calls for a qualitative judgement that disregards facts and focuses solely on the essence of the subject being characterized. This technique is in a way also a manipulative wording, as it is used at the level of the nominal group rather than being a full-fledged argument with a premise and a conclusion. For example, in the political discourse, typically one is using adjectives and nouns as labels that refer to political orientation, opinions, personal characteristics, and association to some organisations, as well as insults. What distinguishes it from the Loaded Language technique, is that it is only concerned with the characterization of the subject.
+  input_example: Fascist Anti-Vax Riot Sparks COVID Outbreak in Australia.
+  output_example: |-
+    {"description": "Technique used: Yes — Name Calling / Labeling is present.Fascist is a highly charged, negative political label that evokes fear, authoritarianism, and oppression. Anti-Vax is another label that places the group within a controversial and socially divisive category. The combination of these terms without presenting evidence or argumentation reduces the subject to a hostile identity. Rather than objectively describing the participants or explaining their motivations, the sentence uses labels to provoke emotional judgment in the reader and frame the event and people involved negatively from the outset. This is manipulative wording aimed at shaping perception without argument.",
+    "verdict": true}
+
+Doubt:
+  technique_name: Doubt
+  technique_desc: |-
+    Casting doubt on the character or the personal attributes of someone or something in order to question their general credibility or quality, instead of using a proper argument related to the topic. This can be done for instance, by speaking about the target’s professional background, as a way to discredit their argument. Casting doubt can also be done by referring to some actions or events carried out or planned by some entity that are/were not successful or appear as (probably) resulting in not achieving the planned goals.
+  input_example: This task is quite complex. Is his professional background, experience and the time left sufficient to accomplish the task at hand?
+  output_example: |-
+    {"description": "Technique detected: Casting Doubt. How it was used: The paragraph casts doubt on the subject’s professional background, experience, and available time, questioning whether these are sufficient to complete the task. Instead of evaluating the task or the individual’s argument on its own merits, it undermines their credibility and capability through personal attributes. This aligns with the definition of the Casting Doubt technique, as it subtly challenges the person’s qualifications rather than directly engaging with the substance of the task itself.",
+    "verdict": true}
+
+Questioning_the_Reputation:
+  technique_name: Questioning the Reputation
+  technique_desc: |-
+    This technique is used to attack the reputation of the target by making strong negative claims about it, focusing specially on undermining its character and moral stature rather than relying on an argument about the topic. Whether the claims are true or false is irrelevant for the effective use of this technique. Smears can be used at any point in a discussion. One particular way of using this technique is to preemptively call into question the reputation/credibility of an opponent, before he had any chance to express himself, therefore biasing the audience perception. Hence, one of the name of that technique is “poisoning the well.” The main difference between Casting Doubt and Questioning the reputation technique is that the former focuses on questioning the capacity, the capabilities, and the credibility of the target, while the latter targets undermining the overall reputation, moral qualities, behaviour, etc.
+  input_example: I hope I presented my argument clearly. Now, my opponent will attempt to refute my argument by his own fallacious, incoherent, illogical version of history.
+  output_example: |-
+    {"description": "Yes, the 'Questioning the Reputation' technique is used in the input. The speaker preemptively undermines the opponent by labeling their forthcoming argument as 'fallacious, incoherent, illogical. This is not a direct rebuttal of the argument itself but an attack on the opponent’s reliability and intellectual honesty. The speaker attempts to bias the audience against the opponent before they have spoken, which is a classic case of poisoning the well—a subtype of Questioning the Reputation. The emphasis is on discrediting the opponent’s character and trustworthiness rather than addressing the actual content of their argument.",
+    "verdict": true}
+
+# justification
+Appeal_to_Fear-Prejudice:
+  technique_name: Appeal to Fear - Prejudice
+  technique_desc: |-
+    This technique aims at promoting or rejecting an idea through the repulsion or fear of the audience towards this idea (e.g., via exploiting some preconceived judgements) or towards its alternative. The alternative could be the status quo, in which case the current situation is described in a scary way with Loaded Language. If the fear is linked to the consequences of a decision, it is often the case that this technique is used simultaneously with Appeal to Consequences, and if there are only two alternatives that are stated explicitly, then it is used simultaneously with the False Dilemma technique.
+  input_example: It is a great disservice to the Church to maintain the pretense that there is nothing problematical about Amoris laetitia. A moral catastrophe is self-evidently underway and it is not possible honestly to deny its cause.
+  output_example: |-
+    {"description": "Yes, the Appeal to Fear – Prejudice technique is used. The statement employs Appeal to Fear by invoking the notion of a “moral catastrophe” and suggesting that it is “self-evidently underway.” This creates a sense of urgency, danger, and moral decline tied to the acceptance or uncritical treatment of Amoris laetitia (a Church document). The use of emotionally charged language like “catastrophe” and the implication that denial is dishonest suggests that supporting or ignoring the issue poses a grave threat to the Church’s integrity. This taps into the audience’s potential prejudices or fears about moral decay within religious institutions.",
+    "verdict": true}
+
+Appeal_to_Values:
+  technique_name: Appeal to Values
+  technique_desc: |-
+    This technique gives weigh to an idea by linking it to values seen by the targe audience as positive. These values are presented as an authoritative reference in order to support or t reject an argument.
+  
+    Examples of such values are, for instance: tradition, religion, ethics, age, fairness, liberty, democracy, peace, transparency, etc. When such values are mentioned outside the context of a proper argument by simply using certain adjectives or nouns as a way of characterizing something or someone, such references fall under another label, namely, Loaded Language, which is a form of Manipulative Wording.
+  input_example: It’s standard practice to pay men more than women so we’ll continue adhering to the same standards this company has always followed.
+  output_example: |-
+    {"description": "This statement uses the {technique_name} technique by referencing tradition or established standards as a justification for a current (and potentially unethical) practice. The underlying value appealed to is continuity with the past, implying that something is correct or acceptable simply because it aligns with historical practice. No independent justification is given for why the practice is fair or appropriate — the appeal to tradition is the argument.",
+    "verdict": true}
+
+# manipulative
+Exaggeration-Minimisation:
+  technique_name: Exaggeration - Minimisation
+  technique_desc: |-
+    This technique consists of either representing something in an excessive manner – by making things larger, better, worse (e.g., the best of the best, quality guaranteed) – or by making something seem less important or smaller than it really is (e.g., saying that an insult was just a joke), downplaying the statements and ignoring the arguments and the accusations made by an opponent.
+  input_example: From the seminaries, to the clergy, to the bishops, to the cardinals, homosexuals are present at all levels, by the thousand.
+  output_example: |-
+    {"description": "Yes, the Exaggeration – Minimisation technique is used. The statement uses exaggeration by claiming that “homosexuals are present at all levels, by the thousand.” This presents the presence of homosexual individuals in the Church hierarchy in an excessive manner, suggesting an overwhelming or pervasive scale without providing specific evidence. The phrase “by the thousand” is particularly hyperbolic, aiming to amplify the perceived extent of the phenomenon and possibly provoke emotional or moral reaction.",
+    "verdict": true}
+Loaded_Language:
+  technique_name: Loaded Language
+  technique_desc: |-
+    use of specific words and phrases with strong emotional implications (either positive or negative) to influence and to convince the audience that an argument is valid. It is also known as Appeal to Argument from Emotive Language.
+  input_example: They keep feeding these people with trash. They should stop.
+  output_example: |-
+    {"description": "The phrase 'feeding these people with trash' uses strong negative emotional language to provoke disgust or anger in the audience. This is a clear use of Loaded Language, as it frames the situation in a way that is meant to emotionally charge the listener rather than rely on neutral or factual language.",
+    "verdict": true}
+Repetition:
+  technique_name: Repetition
+  technique_desc: |-
+    The speaker uses the same word, phrase, story, or imagery repeatedly with the hope that the repetition will lead to persuade the audience.
+  input_example: Hurtlocker deserves an Oscar.Other films have potential, but they do not deserve an Oscar like Hurtlocker does. The other movies may deserve an honorable mention but Hurtlocker deserves the Oscar.
+  output_example: |-
+    {"description": "Yes, the Repetition technique is used. The phrase “Hurtlocker deserves an Oscar” or close variations of it are repeated multiple times throughout the statement. This repetition reinforces the idea that Hurtlocker is uniquely worthy of the Oscar, aiming to implant this view in the audience’s mind through sheer frequency. The reiteration elevates the film while simultaneously minimizing the merit of other contenders.",
+    "verdict": true}
+new:
+  technique_name: 
+  technique_desc: |-
+    
+  input_example: 
+  output_example: |-

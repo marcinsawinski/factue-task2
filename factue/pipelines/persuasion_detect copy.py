@@ -5,7 +5,8 @@ import luigi
 import pandas as pd
 import json
 
-from factue.methods.llm_calls import make_call
+from factue.methods.llm_calls import (load_metadata_from_template_parts,
+                                      make_call)
 from factue.pipelines.base_llm_task import BaseLLmTask, GenericBatchWrapper
 from factue.utils.args import get_args
 from factue.utils.parsers import (expand_series_of_dict_lists,
@@ -20,8 +21,7 @@ class PersuasionDetectTask(BaseLLmTask):
     def _process_df(self, df, llm):
         df = df#.head(2).copy()
         df["output_id"] = self.output_id
-        df["prompt_name"] = self.prompt_name
-        df["prompt_version"] = self.prompt_version
+        df["prompt_id"] = self.prompt_id
         df["job"] = self.job
         df["step"] = self.step
         df["max_iterations"] = self.max_iterations
@@ -30,16 +30,31 @@ class PersuasionDetectTask(BaseLLmTask):
         df['model_provider'] = self.model_provider
         df['model_name'] = self.model_name
         df['model_mode'] = self.model_mode
+        metadata = load_metadata_from_template_parts(
+            self.job, self.step, self.prompt_id
+        )
+        technique_id = metadata.get('technique_id', 'missing_metadata')
+        df["technique_id"] = technique_id
+
+        schema = {
+    "type": "object",
+    "properties": {
+        "Description": {"type": "string"},
+        "Verdict": {"type": "boolean"}
+    },
+    "required": ["Description", "Verdict"],
+    "additionalProperties": True
+}
         
         make_call_result = df.apply(
             lambda row: make_call(
                 llm=llm,
                 job=self.job,
                 step=self.step,
-                prompt_name=self.prompt_name,
-                prompt_version=self.prompt_version,
+                prompt_id=self.prompt_id,
                 variables={"text": row["text"], "text_lang": row["text_lang"]},
                 max_iterations=self.max_iterations,
+                json_schema=schema,
             ),
             axis=1,
         )
@@ -47,10 +62,8 @@ class PersuasionDetectTask(BaseLLmTask):
         df = pd.concat([df, df_expanded], axis=1)
         if "verdict" in df.columns:
             df['verdict'] = df['verdict'].apply(normalize_binary_list)
-            df["pred"] = df["verdict"].apply(most_frequent)
-
-        if "labels_multi" in df.columns:
-            df["gold"] = df["labels_multi"].apply(lambda x: self.prompt_name in x).apply(normalize_binary_list)
+        df["pred"] = df["verdict"].apply(most_frequent)
+        df["gold"] = df["labels_multi"].apply(lambda x: technique_id in x).apply(normalize_binary_list)
 
         return df
 

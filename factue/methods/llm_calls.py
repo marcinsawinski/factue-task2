@@ -10,43 +10,62 @@ logger = get_logger(__name__)
 METADATA_PART_NAME = "metadata"
 SYSTEM_PART_NAME = "system"
 USER_PART_NAME = "user"
-CONST_PART_NAME = "constants"
+SCHEMA_PART_NAME = "schema"
 PROMPTS_DIR = "prompts"
 
+def load_template_list(job, step, prompt_version):
 
+    prompt_path = PROJECT_ROOT / PROMPTS_DIR / job / step / prompt_version 
+    prompt_content_path = prompt_path / "prompt_content"
+    prompt_layout_path = prompt_path / "prompt_layout"
 
-def load_template_parts(job, step, prompt_id):
-    prompt_template_file = PROJECT_ROOT / PROMPTS_DIR / job / step / prompt_id
-    with open(prompt_template_file.with_suffix(".yaml"), "r") as f:
-        template_parts = yaml.safe_load(f)
-
-    return template_parts
-
-
-def load_metadata_from_template_parts(job, step, prompt_id):
-    template_parts = load_template_parts(job, step, prompt_id)
-    return template_parts.get(METADATA_PART_NAME, {})
-
-
-def make_call(llm, job, step, prompt_id, variables, max_iterations, max_retries=3, json_schema=None):
-    template_parts = load_template_parts(job, step, prompt_id)
-    messages = []
     
-    if SYSTEM_PART_NAME in template_parts:
+    with open(prompt_content_path.with_suffix(".yaml"), "r") as f:
+        prompt_contents = yaml.safe_load(f)
+
+    return prompt_contents
+
+
+def load_template_parts(job, step, prompt_name, prompt_version):
+
+    prompt_path = PROJECT_ROOT / PROMPTS_DIR / job / step / prompt_version 
+    prompt_content_path = prompt_path / "prompt_content"
+    prompt_layout_path = prompt_path / "prompt_layout"
+    
+    with open(prompt_layout_path.with_suffix(".yaml"), "r") as f:
+        prompt_layout = yaml.safe_load(f)
+    
+    with open(prompt_content_path.with_suffix(".yaml"), "r") as f:
+        prompt_contents = yaml.safe_load(f)
+    
+    prompt_content = prompt_contents[prompt_name]
+
+    return prompt_layout, prompt_content
+
+
+def make_call(llm, job, step, prompt_name, prompt_version, variables, max_iterations, max_retries=3):
+    prompt_layout, prompt_content = load_template_parts(job, step, prompt_name,prompt_version)
+    messages = []
+
+    if SCHEMA_PART_NAME in prompt_layout:
+        json_schema = prompt_layout[SCHEMA_PART_NAME]
+    else:
+        json_schema = None
+    
+    if SYSTEM_PART_NAME in prompt_layout:
         messages.append(
-            SystemMessagePromptTemplate.from_template(template_parts[SYSTEM_PART_NAME])
+            SystemMessagePromptTemplate.from_template(prompt_layout[SYSTEM_PART_NAME])
         )
-    if USER_PART_NAME in template_parts:
+    if USER_PART_NAME in prompt_layout:
         messages.append(
-            HumanMessagePromptTemplate.from_template(template_parts[USER_PART_NAME])
+            HumanMessagePromptTemplate.from_template(prompt_layout[USER_PART_NAME])
         )
 
     if not messages:
         return [{'error': "Invalid template"}]
 
     prompt_template = ChatPromptTemplate.from_messages(messages)
-    constants = template_parts.get(CONST_PART_NAME, {})
-    placeholders = {**variables, **constants}
+    placeholders = {**variables, **prompt_content}
     response = []
 
     for i in range(max_iterations):
@@ -56,10 +75,11 @@ def make_call(llm, job, step, prompt_id, variables, max_iterations, max_retries=
         while retries <= max_retries:
             try:
                 prompt = prompt_template.invoke(placeholders)
+                logger.debug(f"prompt: {prompt}")
                 raw_msg = llm.invoke(prompt.to_messages())
                 raw_content = raw_msg.content.strip()
                 validated_msg = validate_response(raw_content, json_schema)
-                logger.info("response is valid: ":validated_msg['is_valid'])
+                logger.info(f"is valid: {validated_msg['is_valid']}")
                 if validated_msg['is_valid']:
                     response.append(validated_msg)
                     break  # Exit retry loop if successful

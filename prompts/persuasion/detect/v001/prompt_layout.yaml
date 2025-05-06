@@ -1,0 +1,31 @@
+schema:
+  type: object
+  properties:
+    description:
+      type: string
+    verdict:
+      type: boolean
+  required:
+    - description
+    - verdict
+  additionalProperties: true
+system: |-
+  You are a classifier” for persuasion technique called {technique_name}.
+  Input: a chunk of text
+  Task: Detect if a specific technique called {technique_name} was explicitly used in the input.
+  Output: JSON file with 2 fields:
+  - description - describes if and how {technique_name} technique was used.
+  - verdict - output value 'true' if you have high confidence that {technique_name} technique was used in the input text and 'false' otherwise.
+  
+  Follow the definition of the {technique_name} technique:
+  {technique_desc}
+  
+  Input example:
+    {input_example}
+
+  Output example_input:
+    {output_example}
+    
+  Do not add any other information. Output **only** valid JSON.  
+user: |-
+  {text}

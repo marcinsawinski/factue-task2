@@ -1,24 +1,24 @@
 #!/bin/bash
-# --resource-type OLLAMA_HOST \
-# --resource-list 2 \
-# --prompt-id "attack/Questioning_the_Reputation_v001"\
-# --part 0000 \
-# --lang pl \
-
 clear
 set -e  # Exit on error
-BASE_PATH="prompts/persuasion/detect"
+# Manually declared list of prompt IDs
+prompt_ids=(
+"Name_Calling-Labeling"
+"Doubt"
+"Questioning_the_Reputation"
+"Appeal_to_Fear-Prejudice"
+"Appeal_to_Values"
+"Exaggeration-Minimisation"
+"Loaded_Language"
+"Repetition"
+)
 
-# Find all YAML files under the base path
-find "$BASE_PATH" -type f -name "*v001.yaml" | while read -r file; do
-    # Get the prompt ID (relative path to base)
-    relative_path="${file#$BASE_PATH/}"
-    prompt_id="${relative_path%.yaml}"
+for prompt_id in "${prompt_ids[@]}"; do
+  echo "**************************************************"
+  echo "Running Luigi for prompt-id: $prompt_id"
+  echo "**************************************************"
 
-    echo "**************************************************"
-    echo "Running Luigi for prompt-id: $prompt_id"
-    echo "**************************************************"
-    python -m factue.pipelines.persuasion_detect \
+  python -m factue.pipelines.persuasion_detect \
     --prompt-id "$prompt_id" \
     --split train \
     --max-iterations 1 \
@@ -26,8 +26,13 @@ find "$BASE_PATH" -type f -name "*v001.yaml" | while read -r file; do
     --model-name LLAMA_32_3B \
     --model-provider OLLAMA \
     --model-mode CHAT \
+    --part 000* \
+    --lang * \
     --resource-type OLLAMA_HOST \
-    --resource-list 02 \
-    --part 0000 \
-    --lang pl 
+    --resource-list 2 
 done
+
+# --resource-type OLLAMA_HOST \
+# --resource-list 2 \
+# --part 0000 \
+# --lang pl \

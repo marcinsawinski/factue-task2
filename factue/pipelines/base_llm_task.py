@@ -27,7 +27,8 @@ class BaseLLmTask(luigi.Task):
     model_mode = luigi.Parameter()
     job = luigi.Parameter()
     step = luigi.Parameter()
-    prompt_id = luigi.Parameter()
+    prompt_name = luigi.Parameter()
+    prompt_version = luigi.Parameter()
     max_iterations = luigi.IntParameter()
 
     temperature = luigi.FloatParameter()
@@ -77,7 +78,8 @@ class BaseLLmTask(luigi.Task):
                 llm=llm,
                 job=self.job,
                 step=self.step,
-                prompt_id=self.prompt_id,
+                prompt_name=self.prompt_name,
+                prompt_version=self.prompt_version,
                 variables={"text": row["text"], "text_lang": row["text_lang"]},
                 max_iterations=self.max_iterations,
             ),
@@ -124,13 +126,14 @@ class GenericBatchWrapper(luigi.WrapperTask):
     model_name = luigi.EnumParameter(enum=ModelName)
     model_provider = luigi.EnumParameter(enum=ModelProvider)
     model_mode = luigi.EnumParameter(enum=ModelMode)
-    prompt_id = luigi.Parameter()
+    prompt_name = luigi.Parameter()
+    prompt_version = luigi.Parameter()
     max_iterations = luigi.IntParameter(default=1)
     temperature = luigi.FloatParameter(default=0.0)
     seed = luigi.IntParameter(default=0)
 
     def _get_output_id(self):
-        return f"{self.model_name.name}/{self.prompt_id}"
+        return f"{self.model_name.name}/{self.prompt_version}/{self.prompt_name}"
 
     def _get_input_mask(self):
         return f"{self.split}/{self.split}-{self.lang}/batch_{self.part}.parquet"
@@ -170,7 +173,8 @@ class GenericBatchWrapper(luigi.WrapperTask):
                 model_mode=self.model_mode,
                 job=self.job,
                 step=self.step,
-                prompt_id=self.prompt_id,
+                prompt_name=self.prompt_name,
+                prompt_version=self.prompt_version,
                 max_iterations=self.max_iterations,
                 temperature=self.temperature,
                 seed=self.seed,
