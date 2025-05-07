@@ -201,7 +201,6 @@ Conversation_Killer:
     {"description": "The example 'Immigrants welcome, racist not!' is a brief and striking phrase that conveys an emotional message, labeling those who oppose immigrants as 'racist.' It functions as a slogan because it is memorable, emotionally charged, and aims to influence public opinion through a simplified, impactful statement.",
     "verdict": true}
 
-
 Appeal_to_Time:
   technique_name: Appeal to Time
   technique_desc: |-
@@ -209,7 +208,7 @@ Appeal_to_Time:
   input_example: This is no time to engage in the luxury of cooling off or to take the tranquilizing drug of gradualism. Now is the time to make real the promises of democracy. Now is the time to rise from the dark and desolate valley of segregation to the sunlit path of racial justice.
   output_example: |-
     {"description": "The example explicitly invokes the urgency of the present moment and repeatedly uses the phrase 'now is the time' to emphasize immediate action, aligning directly with the appeal to time persuasion technique.",
-   "verdict": true}
+    "verdict": true}
 
 
 # MANIPULATIVE WORDING
