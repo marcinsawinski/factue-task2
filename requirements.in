@@ -33,3 +33,4 @@ torch
 gpustat
 types-PyYAML
 demjson3
+seaborn

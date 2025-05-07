@@ -155,10 +155,14 @@ class GenericBatchWrapper(luigi.WrapperTask):
             Path(self.DATA_ROOT) / self.LLM_OUTPUT / self.job / self.step / output_id
         )  # type: ignore
         input_mask = self._get_input_mask()
-        logging.info('input_mask: '+str(input_mask))
+        logging.info("input_mask: " + str(input_mask))
         for idx, input_path in enumerate(input_dir.glob(input_mask)):
-            resource_id=self.resource_type + self.resource_list[idx % len(self.resource_list)]
-            logging.info(f'input_path:  {str(input_path)} with resource_id: {str(resource_id)}')
+            resource_id = (
+                self.resource_type + self.resource_list[idx % len(self.resource_list)]
+            )
+            logging.info(
+                f"input_path:  {str(input_path)} with resource_id: {str(resource_id)}"
+            )
             yield self.task_cls(
                 # the “fixed” I/O shape
                 input_path=str(input_path),
@@ -181,7 +185,7 @@ class GenericBatchWrapper(luigi.WrapperTask):
             )  # type: ignore
 
     def requires(self):
-        if not hasattr(self, '_cached_requires'):
+        if not hasattr(self, "_cached_requires"):
             self._cached_requires = list(self._generate_dependencies())
         return self._cached_requires
 

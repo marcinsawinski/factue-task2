@@ -32,7 +32,7 @@ user: |-
     {text}
 
   Expert verdict:
-    {gold}
+    {gold_text}
 
   Excerpts supporting verdict:
     {spans}
