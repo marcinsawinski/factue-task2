@@ -91,14 +91,14 @@ def make_call(llm, job, step, prompt_name, prompt_version, variables, max_iterat
                     if hasattr(e, "response"):
                         error_json = e.response.json()
                         error_details = error_json.get("error", {})
-                        return [{'error': error_details}]
+                        return [validate_response(None, None, error = error_details)]
                 except Exception as json_err:
                     logger.warning(f"Could not parse error response JSON: {json_err}")
                 logger.exception("Unhandled exception during LLM call")
-                return [{'error': "Unhandled exception during LLM call"}]
+                return [validate_response(None, None, error = "Unhandled exception during LLM call")]
 
         else:
             # Reached max_retries without success
             response.append(validated_msg)#{'error': f"Failed after {max_retries} retries"})
 
-    return response if response else [{'error': "Empty response"}]
+    return response if response else [validate_response(None, None, error = "Empty response")]

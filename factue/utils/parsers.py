@@ -67,17 +67,28 @@ def coerce_null_values(data):
             data[k] = None
     return data
 
-def validate_response(payload, schema):
+def validate_response(payload, schema, error=None):
+
     result = {"raw": payload}
+    
+    if error is not None:
+        result["error"] = error
+    
     if schema is None:
         result.update({"is_valid": True,"status":"no validation"})
         return result
-    raw_json, think_content, extra_content = extract_json_from_payload(payload)
-    # print('extract_json_from_payload:',raw_json, think_content, extra_content, sep='\n')
-
+    
     schema_properties = {k.lower(): v for k, v in schema["properties"].items()}
     required_fields = [k.lower() for k in schema["required"]]
     boolean_fields = [k for k, v in schema_properties.items() if v.get("type") == "boolean"]
+
+    result.update({key: None for key in schema_properties})
+
+    if payload is None:
+        return result
+
+    raw_json, think_content, extra_content = extract_json_from_payload(payload)
+    # print('extract_json_from_payload:',raw_json, think_content, extra_content, sep='\n')
 
     result.update({
         "extra_properties": None,
@@ -86,7 +97,7 @@ def validate_response(payload, schema):
         "illegal_value": {},
         "is_valid": False
     })
-    result.update({key: None for key in schema_properties})
+    
 
     if not raw_json:
         return result

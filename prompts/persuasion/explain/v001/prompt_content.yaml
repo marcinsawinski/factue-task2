@@ -1,0 +1,250 @@
+# ATTACK ON REPUTATION
+Name_Calling-Labeling:
+  technique_name: Name Calling - Labeling
+  technique_desc: |-
+    a form of argument in which loaded labels are directed at an individual or a group, typically in an insulting or demeaning way. Labelling an object as either something the target audience fears, hates, or on the contrary finds desirable or loves. This technique calls for a qualitative judgement that disregards facts and focuses solely on the essence of the subject being characterized. This technique is in a way also a manipulative wording, as it is used at the level of the nominal group rather than being a full-fledged argument with a premise and a conclusion. For example, in the political discourse, typically one is using adjectives and nouns as labels that refer to political orientation, opinions, personal characteristics, and association to some organisations, as well as insults. What distinguishes it from the Loaded Language technique, is that it is only concerned with the characterization of the subject.
+  input_example: Fascist Anti-Vax Riot Sparks COVID Outbreak in Australia.
+  output_example: |-
+    {"description": "Technique used: Yes — Name Calling / Labeling is present.Fascist is a highly charged, negative political label that evokes fear, authoritarianism, and oppression. Anti-Vax is another label that places the group within a controversial and socially divisive category. The combination of these terms without presenting evidence or argumentation reduces the subject to a hostile identity. Rather than objectively describing the participants or explaining their motivations, the sentence uses labels to provoke emotional judgment in the reader and frame the event and people involved negatively from the outset. This is manipulative wording aimed at shaping perception without argument.",
+    "verdict": true}
+
+
+Guilt_by_Association:
+  technique_name: Guilt by Association
+  technique_desc: |-
+    Attacking the opponent or an activity by associating it with another group, activity, or concept that has sharp negative connotations for the target audience. The most common example, which has given its name in the literature (i.e. Reduction ad Hitlerum) to that technique is making comparisons to Hitler and the Nazi regime. However, it is important to emphasize, that this technique is not restricted to comparisons to that group only. More precisely, this can be done by claiming a link or an equivalence between the target of the technique to any individual, group, or event in the presence or in the past, which has or had an unquestionable negative perception (e.g., was considered a failure), or is depicted in such way.
+  input_example: Manohar is a big supporter for equal pay for equal work. This is the same policy that all those extreme feminist groups support. Extremists like Manohar should not be taken seriously.
+  output_example: |-
+    {"description": "The example uses Guilt by Association by discrediting Manohar's support for equal pay by linking it to 'extreme feminist groups,' which the speaker implies have negative connotations. The intent is to undermine Manohar's credibility by associating him with a group perceived negatively by the target audience, rather than addressing his argument directly.",
+    "verdict": true}
+
+
+Doubt:
+  technique_name: Casting Doubt
+  technique_desc: |-
+    Casting doubt on the character or the personal attributes of someone or something in order to question their general credibility or quality, instead of using a proper argument related to the topic. This can be done for instance, by speaking about the target’s professional background, as a way to discredit their argument. Casting doubt can also be done by referring to some actions or events carried out or planned by some entity that are/were not successful or appear as (probably) resulting in not achieving the planned goals.
+  input_example: This task is quite complex. Is his professional background, experience and the time left sufficient to accomplish the task at hand?
+  output_example: |-
+    {"description": "Technique detected: Casting Doubt. How it was used: The paragraph casts doubt on the subject’s professional background, experience, and available time, questioning whether these are sufficient to complete the task. Instead of evaluating the task or the individual’s argument on its own merits, it undermines their credibility and capability through personal attributes. This aligns with the definition of the Casting Doubt technique, as it subtly challenges the person’s qualifications rather than directly engaging with the substance of the task itself.",
+    "verdict": true}
+
+
+Appeal_to_Hypocrisy:
+  technique_name: Appeal to Hypocrisy
+  technique_desc: |-
+    The target of the technique is attacked on its reputation by charging them with hypocrisy or inconsistency. This can be done explicitly by calling out hypocrisy directly, or more implicitly by underlying the contradictions between different positions that were held or actions that were done in the past. A special way of calling out hypocrisy is by telling that someone who criticizes you for something you did, also did it in the past.
+  input_example: How can you demand that I eat less meat to reduce my carbon footprint if you yourself drive a big SUV and fly for holidays to Bali?
+  output_example: |-
+    {"description": "The example contains an Appeal to Hypocrisy because it discredits the argument for eating less meat to reduce the carbon footprint by pointing out that the person making this demand is themselves acting inconsistently by driving a big SUV and flying for holidays, rather than directly addressing the merit of the argument.",
+    "verdict": true}
+
+
+Questioning_the_Reputation:
+  technique_name: Questioning the Reputation
+  technique_desc: |-
+    This technique is used to attack the reputation of the target by making strong negative claims about it, focusing specially on undermining its character and moral stature rather than relying on an argument about the topic. Whether the claims are true or false is irrelevant for the effective use of this technique. Smears can be used at any point in a discussion. One particular way of using this technique is to preemptively call into question the reputation/credibility of an opponent, before he had any chance to express himself, therefore biasing the audience perception. Hence, one of the name of that technique is “poisoning the well.” The main difference between Casting Doubt and Questioning the reputation technique is that the former focuses on questioning the capacity, the capabilities, and the credibility of the target, while the latter targets undermining the overall reputation, moral qualities, behaviour, etc.
+  input_example: I hope I presented my argument clearly. Now, my opponent will attempt to refute my argument by his own fallacious, incoherent, illogical version of history.
+  output_example: |-
+    {"description": "Yes, the 'Questioning the Reputation' technique is used in the input. The speaker preemptively undermines the opponent by labeling their forthcoming argument as 'fallacious, incoherent, illogical. This is not a direct rebuttal of the argument itself but an attack on the opponent’s reliability and intellectual honesty. The speaker attempts to bias the audience against the opponent before they have spoken, which is a classic case of poisoning the well—a subtype of Questioning the Reputation. The emphasis is on discrediting the opponent’s character and trustworthiness rather than addressing the actual content of their argument.",
+    "verdict": true}
+
+
+# JUSTIFICATION
+Flag_Waving:
+  technique_name: Flag Waving
+  technique_desc: |-
+    Justifying or promoting an idea by exhaling the pride of a group or highlighting the benefits for that specific group. The stereotypical example would be national pride, and hence the name of the technique; however, the target group it applies to might be any group, e.g., related to race, gender, political preference, etc. The connection to nationalism, patriotism, or benefit for an idea, group, or country might be fully undue and is usually based on the presumption that the recipients already have certain beliefs, biases, and prejudices about the given issue. It can be seen as an appeal to emotions instead to logic of the audience aiming to manipulate them to win an argument. As such, this technique can also appear outside the form of well constructed argument, by simply making mentions that resonate with the feeling of a particular group and as such setting up a context for further arguments.
+  input_example: We should make America great again, and restrict the immigration laws.
+  output_example: |-
+    {"description": "The example uses Flag Waving by appealing to national pride with the phrase 'We should make America great again,' and justifying stricter immigration laws as a means to benefit the country. It evokes patriotic feelings to promote the idea, rather than relying solely on logical argument.",
+    "verdict": true}
+
+
+Appeal_to_Authority:
+  technique_name: Appeal to Authority
+  technique_desc: |-
+    a weight is given to an argument, an idea or information by simply stating that a particular entity considered as an authority is the source of the information. The entity mentioned as an authority may, but does not need to be, an actual valid authority in the domain-specific field to discuss a particular topic or to be considered and serve as an expert. What is important, and makes it different from simply sourcing information, is that the tone of the text indicates that it capitalizes on the weight of an alleged authority in order to justify some information, claim, or conclusion. Referencing a valid authority is not a logical fallacy, while referencing an invalid authority is a logical fallacy, and both are captured within this label. In particular, a self-reference as an authority falls under this technique as well.
+  input_example: Since the Pope said that this aspect of the doctrine is true we should add it to the creed.
+  output_example: |-
+    {"description": "The example uses Appeal to Authority by justifying that 'this aspect of the doctrine is true' simply because the Pope said it. It gives weight to the claim based on the authority of the Pope, capitalizing on his status as an authority figure.",
+    "verdict": true}
+
+
+Appeal_to_Popularity:
+  technique_name: Appeal to Popularity
+  technique_desc: |-
+    This technique gives weight to an argument or idea by justifying it on the basis that allegedly “everybody” (or the vast majority) agrees with it or “nobody” disagrees with it. As such, the target audience is encouraged to gregariously adopt the same idea by considering “everyone else” as an authority, and to join in and take the course of the same action. Here, “everyone else” might refer to the general public, key entities and actors in a certain domain, countries, etc. Analogously, an attempt to persuade the audience not to do something because “nobody else is taking the same action” falls under our definition of Appeal to Popularity.
+  input_example: Because everyone else goes away to college, it must be the right thing to do.
+  output_example: |-
+    {"description": "The example contains Appeal to Popularity because it justifies going away to college by claiming that 'everyone else' does it, implying that it must be the right course of action simply because it is popular.",
+    "verdict": true}
+
+
+Appeal_to_Values:
+  technique_name: Appeal to Values
+  technique_desc: |-
+    This technique gives weigh to an idea by linking it to values seen by the targe audience as positive. These values are presented as an authoritative reference in order to support or t reject an argument.
+  
+    Examples of such values are, for instance: tradition, religion, ethics, age, fairness, liberty, democracy, peace, transparency, etc. When such values are mentioned outside the context of a proper argument by simply using certain adjectives or nouns as a way of characterizing something or someone, such references fall under another label, namely, Loaded Language, which is a form of Manipulative Wording.
+  input_example: It’s standard practice to pay men more than women so we’ll continue adhering to the same standards this company has always followed.
+  output_example: |-
+    {"description": "This statement uses the Appeal to Values technique by referencing tradition or established standards as a justification for a current (and potentially unethical) practice. The underlying value appealed to is continuity with the past, implying that something is correct or acceptable simply because it aligns with historical practice. No independent justification is given for why the practice is fair or appropriate — the appeal to tradition is the argument.",
+    "verdict": true}
+
+
+Appeal_to_Fear-Prejudice:
+  technique_name: Appeal to Fear - Prejudice
+  technique_desc: |-
+    This technique aims at promoting or rejecting an idea through the repulsion or fear of the audience towards this idea (e.g., via exploiting some preconceived judgements) or towards its alternative. The alternative could be the status quo, in which case the current situation is described in a scary way with Loaded Language. If the fear is linked to the consequences of a decision, it is often the case that this technique is used simultaneously with Appeal to Consequences, and if there are only two alternatives that are stated explicitly, then it is used simultaneously with the False Dilemma technique.
+  input_example: It is a great disservice to the Church to maintain the pretense that there is nothing problematical about Amoris laetitia. A moral catastrophe is self-evidently underway and it is not possible honestly to deny its cause.
+  output_example: |-
+    {"description": "Yes, the Appeal to Fear – Prejudice technique is used. The statement employs Appeal to Fear by invoking the notion of a “moral catastrophe” and suggesting that it is “self-evidently underway.” This creates a sense of urgency, danger, and moral decline tied to the acceptance or uncritical treatment of Amoris laetitia (a Church document). The use of emotionally charged language like “catastrophe” and the implication that denial is dishonest suggests that supporting or ignoring the issue poses a grave threat to the Church’s integrity. This taps into the audience’s potential prejudices or fears about moral decay within religious institutions.",
+    "verdict": true}
+
+
+# DISTRACTION
+Straw_Man:
+  technique_name: Strawman
+  technique_desc: |-
+    This technique consists in making an impression of refuting the argument of the opponent’s proposition, whereas the real subject of the argument was not addressed or refuted, but instead replaced with a false one. Often, this technique is referred to as misrepresentation of the argument. First, a new argument is created via the covert replacement of the original argument with something that appears somewhat related, but is actually a different, a distorted, an exaggerated, or a misrepresented version of the original proposition, which is referred to as “standing up a straw man.” Subsequently, the newly created ‘false argument (the strawman) is refuted, which is referred to as “knocking down a straw man.” Often, the strawman argument is created in such a way that it is easier to refute, and thus, creating an illusion of having defeated an opponent’s real proposition. Fighting a strawman is easier than fighting against a real person, which explains the origin of the name of this technique. In practice, it appears often as an abusive reformulation or explanation of what the opponent actually’ means or wants.
+  input_example: Referring to your claim that providing medicare for all citizens would be costly and a danger to the free market, I infer that you don’t care if people die from not having healthcare, so we are not going to support your endeavour.
+  output_example: |-
+    { "description": "The example contains the Strawman technique because it misrepresents the original argument. The original argument is about the financial and free-market implications of providing medicare for all citizens. However, it is distorted into a much more extreme position—that the person making the argument doesn't care if people die from lack of healthcare. This exaggeration is then refuted, rather than addressing the original, nuanced point.",
+    "verdict": true}
+
+
+Red_Herring:
+  technique_name: Red Herring
+  technique_desc: |-
+    This technique consists in diverting the attention of the audience from the main topic being discussed, by introducing another topic. The aim of attempting to redirect the argument to another issue is to focus on something the person doing the redirecting can better respond to or to leave the original topic unaddressed. The name of that technique comes from the idea that a fish with a strong smell (like a herring) can be used to divert dogs from the scent of someone they are following. A strawman (defined earlier) is also a specific type of a red herring in the way that it distracts from the main issue by painting the opponent’s argument in an inaccurate light.
+  input_example: Lately, there has been a lot of criticism regarding the quality of our product. We’ve decided to have a new sale in response, so you can buy more at a lower cost!.
+  output_example: |-
+    {"description": "The example contains the Red Herring technique because, instead of addressing the criticism about the product's quality, the speaker introduces a new topic—an upcoming sale—to divert attention from the original issue.",
+    "verdict": true}
+
+
+Whataboutism:
+  technique_name: Whataboutism
+  technique_desc: |-
+    A technique that attempts to discredit an opponent’s position by charging them with hypocrisy without directly disproving their argument. Instead of answering a critical question or argument, an attempt is made to retort with a critical counter-question that expresses a counteraccusation, e.g., mentioning double standards, etc. The intent is to distract from the content of a topic and to switch the topic actually. There is a fine distinction between this technique and Appeal to Hypocrisy, introduced earlier, where the former is an attack on the argument and introduces irrelevant information to the main topic, while the latter is an attack on reputation and highlights the hypocrisy of double standards on the same or a very related topic.
+  input_example: A nation deflects criticism of its recent human rights violations by pointing to the history of slavery in the United States.
+  output_example: |-
+    {"description": "The example contains Whataboutism because instead of addressing the criticism regarding recent human rights violations, the nation distracts by pointing out an unrelated historical issue (slavery in the United States), thus changing the subject with a counteraccusation and not directly disproving the argument.",
+    "verdict": true}
+
+
+Appeal_to_Pity:
+  technique_name: Appeal to Pity
+  technique_desc: |-
+    A technique that evokes feelings of pity, sympathy, compassion or guilt in audience to distract it from focusing on evidence, rational analysis and logical reasoning, so that it accepts the speaker’s conclusion as truthful solely based on soliciting the aforementioned emotions. It is an attempt to sway opinions and fully substitute logical evidence in an argument with a claim intended to elicit pity or guilt.
+  input_example: If this person is found guilty of this crime, his ten children will be left without a parent at home, therefore the jury must submit a verdict of innocence.
+  output_example: |-
+    {"description": "The example attempts to evoke sympathy for the defendant’s ten children to persuade the jury to return a verdict of innocence, rather than focusing on evidence related to the crime. The appeal is primarily to pity and does not provide logical justification for innocence, thus it exhibits the Appeal to Pity technique.",
+    "verdict": true}
+
+
+# SIMPLIFICATION
+Causal_Oversimplification:
+  technique_name: Causal Oversimplification
+  technique_desc: |-
+    Assuming a single cause or reason when there are actually multiple causes for an issue. This technique has the following logical form(s): (a) Y occurred after X; therefore, X was the only cause of Y, or (b) X caused Y; therefore, X was the only cause of Y+ (although A, B, C...etc. also contributed to Y.)
+  input_example: School violence has gone up and academic performance has gone down since video games featuring violence were introduced. Therefore, video games with violence should be banned, resulting in school improvement.
+  output_example: |-
+    {"description": "The example assumes that violent video games are the sole cause of increased school violence and decreased academic performance, ignoring other potential contributing factors. This matches the definition of Causal Oversimplification, as it attributes a complex issue to just one cause.",
+    "verdict": true}
+
+
+False_Dilemma-No_Choice:
+  technique_name: False Dilemma or No Choice
+  technique_desc: |-
+    Sometimes called the either-or fallacy, a false dilemma is a logical fallacy that presents only two options or sides when there actually are many. One of the alternatives is depicted as a no-go option, and hence the only choice is the other option. In extreme cases, the author tells the audience exactly what actions to take, eliminating any other possible choices (also referred to as Dictatorship).
+  input_example: There is no alternative to Pfizer Covid-19 vaccine. Either one takes it or one dies.
+  output_example: |-
+    {"description": "The example presents only two options: taking the Pfizer Covid-19 vaccine or dying, ignoring other possible vaccines and outcomes. This is a classic case of the false dilemma technique, as it forces a binary choice where many alternatives exist.",
+    "verdict": true}
+    
+
+Consequential_Oversimplification:
+  technique_name: Consequential Oversimplification
+  technique_desc: |-
+    An argument or an idea is rejected and instead of discussing whether it makes sense and/or is valid, the argument affirms, without proof, that accepting the proposition would imply accepting other propositions that are considered negative. This technique has the following logical form: if A will happen then B, C, D, ... will happen. The core essence behind this fallacy is an assertion one is making of some ‘first’ event/action leading to a dominolike chain of events that have some significant negative effects and consequences that appear to be ludicrous. This technique is characterized by ignoring and/or understating the likelihood of the sequence of events from the first event leading to the end point (last event). In order to take into account symmetric cases, i.e., using Consequential Oversimplification to promote or to support certain action in a similar way, we also consider cases when the sequence of events leads to positive outcomes (i.e., encouraging people to undertake a certain course of action(s), with the promise of a major positive event in the end).
+  input_example: If we begin to restrict freedom of speech, this will encourage the government to infringe upon other fundamental rights, and eventually this will result in a totalitarian state where citizens have little to no control of their lives and decisions they make.
+  output_example: |-
+    {"description": "The example fits the technique Consequential Oversimplification because it claims that restricting freedom of speech will ultimately lead to a totalitarian state, framing this as a direct chain of progressively worse consequences. It does not provide a nuanced argument about the actual likelihood of each step in the sequence, and it oversimplifies the complex relationship between initial restrictions and the supposed extreme outcome.",
+    "verdict": true}
+
+
+False_Equivalence:
+  technique_name: False Equivalence
+  technique_desc: |-
+    A technique that attempts to treat scenarios that are significantly different as if they had equal merit or significance. In particular, an emphasis is being made on one specific shared characteristic between the items of comparison in the argument that is way off in the order of magnitude, oversimplified, or just that important additional factors have been ignored. The introduction of the certain shared characteristics of the scenarios is then used to consider them equal. This technique has the following logical form: A and B share some characteristic X. Therefore, A and B are equal.
+  input_example: The introduction or restrictive hours of alcohol sales boosted the black market industry, and analogously, one can expect that the introduction of too restrictive anti-abortion regulations will lead to growth of the illegal abortion business.
+  output_example: |-
+    {"description": "The example compares the effects of restricting alcohol sales to the effects of restrictive anti-abortion regulations, suggesting that both will similarly lead to black market activities because they share the characteristic of restriction. However, this ignores significant differences in context, social impact, and scale between alcohol and abortion regulations. The comparison treats them as equally impactful due to a shared characteristic, which constitutes false equivalence.",
+    "verdict": true}
+
+
+# CALL
+Slogans:
+  technique_name: Slogans
+  technique_desc: |-
+    A brief and striking phrase that may include labeling and stereotyping. Slogans tend to act as emotional appeals.
+  input_example: Immigrants welcome, racist not!
+  output_example: |-
+    
+Conversation_Killer:
+  technique_name: Conversation Killer
+  technique_desc: |-
+    This includes words or phrases that discourage critical thought and meaningful discussion about a given topic. They are a form of Loaded Language, often passing as folk wisdom, intended to end an argument and quell cognitive dissonance.
+  input_example: I’m not so na¨ıve or simplistic to believe we can eliminate wars. You can’t change human nature. 
+  output_example: |-
+    {"description": "The example 'Immigrants welcome, racist not!' is a brief and striking phrase that conveys an emotional message, labeling those who oppose immigrants as 'racist.' It functions as a slogan because it is memorable, emotionally charged, and aims to influence public opinion through a simplified, impactful statement.",
+    "verdict": true}
+
+Appeal_to_Time:
+  technique_name: Appeal to Time
+  technique_desc: |-
+    The argument is centered around the idea that time has come for a particular action. The very timeliness of the idea is part of the argument.
+  input_example: This is no time to engage in the luxury of cooling off or to take the tranquilizing drug of gradualism. Now is the time to make real the promises of democracy. Now is the time to rise from the dark and desolate valley of segregation to the sunlit path of racial justice.
+  output_example: |-
+    {"description": "The example explicitly invokes the urgency of the present moment and repeatedly uses the phrase 'now is the time' to emphasize immediate action, aligning directly with the appeal to time persuasion technique.",
+    "verdict": true}
+
+
+# MANIPULATIVE WORDING
+Loaded_Language:
+  technique_name: Loaded Language
+  technique_desc: |-
+    use of specific words and phrases with strong emotional implications (either positive or negative) to influence and to convince the audience that an argument is valid. It is also known as Appeal to Argument from Emotive Language.
+  input_example: They keep feeding these people with trash. They should stop.
+  output_example: |-
+    {"description": "The phrase 'feeding these people with trash' uses strong negative emotional language to provoke disgust or anger in the audience. This is a clear use of Loaded Language, as it frames the situation in a way that is meant to emotionally charge the listener rather than rely on neutral or factual language.",
+    "verdict": true}
+
+Obfuscation-Vagueness-Confusion:
+  technique_name: Obfuscation, Intentional Vagueness, Confusion
+  technique_desc: |-
+    This fallacy uses words that are deliberately not clear, so that the audience may have its own interpretations. For example, an unclear phrase with multiple or unclear definitions is used within the argument and, therefore, does not support the conclusion. Statements that are imprecise and intentionally do not fully or vaguely answer the question posed fall under this category too. 
+  input_example: Feathers cannot be dark, because all feathers are light!
+  output_example: |-
+    {"description": "The example contains intentional vagueness and confusion by using the term 'light.' The word 'light' can have multiple meanings: light in color or light in weight. By employing an ambiguous term, the statement becomes unclear and open to interpretation, leading to confusion about the intended meaning. This aligns with the definition of the technique, which involves using imprecise or unclear language.",
+    "verdict": true}
+
+
+Exaggeration-Minimisation:
+  technique_name: Exaggeration - Minimisation
+  technique_desc: |-
+    This technique consists of either representing something in an excessive manner – by making things larger, better, worse (e.g., the best of the best, quality guaranteed) – or by making something seem less important or smaller than it really is (e.g., saying that an insult was just a joke), downplaying the statements and ignoring the arguments and the accusations made by an opponent.
+  input_example: From the seminaries, to the clergy, to the bishops, to the cardinals, homosexuals are present at all levels, by the thousand.
+  output_example: |-
+    {"description": "Yes, the Exaggeration – Minimisation technique is used. The statement uses exaggeration by claiming that “homosexuals are present at all levels, by the thousand.” This presents the presence of homosexual individuals in the Church hierarchy in an excessive manner, suggesting an overwhelming or pervasive scale without providing specific evidence. The phrase “by the thousand” is particularly hyperbolic, aiming to amplify the perceived extent of the phenomenon and possibly provoke emotional or moral reaction.",
+    "verdict": true}
+
+Repetition:
+  technique_name: Repetition
+  technique_desc: |-
+    The speaker uses the same word, phrase, story, or imagery repeatedly with the hope that the repetition will lead to persuade the audience.
+  input_example: Hurtlocker deserves an Oscar.Other films have potential, but they do not deserve an Oscar like Hurtlocker does. The other movies may deserve an honorable mention but Hurtlocker deserves the Oscar.
+  output_example: |-
+    {"description": "Yes, the Repetition technique is used. The phrase “Hurtlocker deserves an Oscar” or close variations of it are repeated multiple times throughout the statement. This repetition reinforces the idea that Hurtlocker is uniquely worthy of the Oscar, aiming to implant this view in the audience’s mind through sheer frequency. The reiteration elevates the film while simultaneously minimizing the merit of other contenders.",
+    "verdict": true}

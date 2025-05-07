@@ -10,7 +10,7 @@ schema:
     - verdict
   additionalProperties: true
 system: |-
-  You are a classifier” for persuasion technique called {technique_name}.
+  You are a classifier for persuasion technique called {technique_name}.
   Input: a chunk of text
   Task: Detect if a specific technique called {technique_name} was explicitly used in the input.
   Output: JSON file with 2 fields:
