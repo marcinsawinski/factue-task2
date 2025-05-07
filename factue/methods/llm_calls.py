@@ -70,8 +70,8 @@ def build_prompt(job, step, prompt_name, prompt_version, variables):
     prompt_template = ChatPromptTemplate.from_messages(messages)
     placeholders = {**variables, **prompt_content}
 
-    prompt = prompt_template.format_messages(placeholders)
-    return prompt, json_schema
+    messages = prompt_template.format_messages(**placeholders)
+    return messages, json_schema
 
 
 def make_call(
@@ -85,7 +85,7 @@ def make_call(
     max_retries=3,
 ):
 
-    prompt, json_schema = build_prompt(
+    messages, json_schema = build_prompt(
         job, step, prompt_name, prompt_version, variables
     )
     response = []
@@ -96,8 +96,8 @@ def make_call(
             max_retries = 0
         while retries <= max_retries:
             try:
-                logger.debug(f"prompt: {prompt}")
-                raw_msg = llm.invoke(prompt.to_messages())
+                logger.debug(f"prompt: {messages}")
+                raw_msg = llm.invoke(messages)
                 raw_content = raw_msg.content.strip()
                 validated_msg = validate_response(raw_content, json_schema)
                 logger.info(f"is valid: {validated_msg['is_valid']}")

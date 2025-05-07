@@ -6,7 +6,12 @@ from collections import Counter, defaultdict
 import demjson3
 import pandas as pd
 from jsonschema import ValidationError, validate
-from pandas.api.types import is_list_like
+
+
+def replace_empty_dicts_in_list(x):
+    if isinstance(x, list):
+        return [None if isinstance(i, dict) and not i else i for i in x]
+    return x
 
 
 def extract_json_from_payload(payload):

@@ -10,6 +10,7 @@ from factue.methods.llm_calls import make_call
 from factue.methods.llm_langchain.llm import Llm
 from factue.utils.args import get_args
 from factue.utils.logger import get_logger
+from factue.utils.parsers import replace_empty_dicts_in_list
 from factue.utils.paths import generate_output_from_input_path
 from factue.utils.types import Job, ModelMode, ModelName, ModelProvider
 
@@ -93,8 +94,30 @@ class BaseLLmTask(luigi.Task):
         llm = self._generate_llm()
         df = pd.read_parquet(str(self.input_path))
         df = self._process_df(df, llm)
+        if "illegal_value" in df.columns:
+            df["illegal_value"] = df["illegal_value"].apply(replace_empty_dicts_in_list)
+
+        try:
+            df.to_parquet(output_path, index=True, compression="snappy")
+            logging.info(f"Processed {self.input_path} -> {output_path}")
+        except Exception as e:
+            logging.info(f"Failed to save DataFrame to Parquet: {e}")
+            # Replace top-level directory
+            parts = list(output_path.parts)
+            if parts and parts[0] == "data":
+                parts[0] = "fallback"
+            else:
+                parts.insert(0, "fallback")
+
+            fallback_path = Path(*parts).with_suffix(".pkl")
+            fallback_path.parent.mkdir(parents=True, exist_ok=True)
+            df.to_pickle(fallback_path)
+            logging.info(
+                f"DataFrame saved to Pickle at: {fallback_path} for inspection."
+            )
+
         df.to_parquet(output_path, index=True, compression="snappy")
-        logging.info(f"Processed {self.input_path} -> {output_path}")
+
         self.force = False
 
 
