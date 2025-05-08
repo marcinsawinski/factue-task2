@@ -3,15 +3,15 @@ clear
 set -e  # Exit on error
 # Manually declared list of prompt IDs
 prompt_ids=(
-"Name_Calling-Labeling"
-"Guilt_by_Association"
-"Doubt"
-"Appeal_to_Hypocrisy"
-"Questioning_the_Reputation"
-"Flag_Waving"
-"Appeal_to_Authority"
-"Appeal_to_Popularity"
-"Appeal_to_Values"
+# "Name_Calling-Labeling"
+# "Guilt_by_Association"
+# "Doubt"
+# "Appeal_to_Hypocrisy"
+# "Questioning_the_Reputation"
+# "Flag_Waving"
+# "Appeal_to_Authority"
+# "Appeal_to_Popularity"
+# "Appeal_to_Values"
 "Appeal_to_Fear-Prejudice"
 "Straw_Man"
 "Red_Herring"
@@ -37,6 +37,8 @@ for prompt_id in "${prompt_ids[@]}"; do
 
   python -m factue.pipelines.persuasion_detect \
     --prompt-name "$prompt_id" \
+    --resource-type aoi \
+    --resource-list 0123 \
     --prompt-version v001 \
     --split dev \
     --max-iterations 1 \

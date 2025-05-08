@@ -4,7 +4,9 @@ schema:
     explanation:
       type: string
     updated_definition:
-      type: string
+      type:
+        - string
+        - "null"
   required:
     - explanation
   additionalProperties: true
