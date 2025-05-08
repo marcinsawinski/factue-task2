@@ -20,11 +20,9 @@ system: |-
   Follow the definition of the {technique_name} technique:
   {technique_desc}
   
-  Input example:
-    {input_example}
-
-  Output example:
-    {output_example}
+  Output format:
+    {{"description": "if and how {technique_name} technique was used.",
+    "verdict": true|false}}
     
   Do not add any other information. Output **only** valid JSON.  
 user: |-
