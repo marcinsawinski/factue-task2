@@ -36,12 +36,12 @@ def extract_json_from_payload(payload):
     json_str = json_match.group(0).strip() if json_match else None
 
     # Extract any extra content apart from think and json
-    extra_content = (
+    plain_content = (
         cleaned.replace(json_str, "", 1).strip() if json_str else cleaned.strip()
     )
-    extra_content = extra_content if extra_content else None
+    plain_content = plain_content if plain_content else None
 
-    return json_str, think_content, extra_content
+    return json_str, think_content, plain_content
 
 
 def normalize_keys(data):
@@ -82,14 +82,27 @@ def coerce_null_values(data):
 
 
 def validate_response(payload, schema, error=None):
+    print("*" * 10, payload, "*" * 10, sep="\n")
 
     result = {"raw": payload}
 
     if error is not None:
         result["error"] = error
 
+    if payload is None:
+        return result
+
+    raw_json, think_content, plain_content = extract_json_from_payload(payload)
+
     if schema is None:
-        result.update({"is_valid": True, "status": "no validation"})
+        result.update(
+            {
+                "is_valid": True,
+                "status": "no validation",
+                "think_content": think_content,
+                "plain_content": plain_content,
+            }
+        )
         return result
 
     schema_properties = {k.lower(): v for k, v in schema["properties"].items()}
@@ -100,17 +113,13 @@ def validate_response(payload, schema, error=None):
 
     result.update({key: None for key in schema_properties})
 
-    if payload is None:
-        return result
-
-    raw_json, think_content, extra_content = extract_json_from_payload(payload)
-    # print('extract_json_from_payload:',raw_json, think_content, extra_content, sep='\n')
+    # print('extract_json_from_payload:',raw_json, think_content, plain_content, sep='\n')
 
     result.update(
         {
             "extra_properties": None,
             "think_content": think_content,
-            "extra_content": extra_content,
+            "plain_content": plain_content,
             "illegal_value": {},
             "is_valid": False,
         }
@@ -269,6 +278,15 @@ def most_frequent(lst):
     if not cleaned:
         return None
     return Counter(cleaned).most_common(1)[0][0]
+
+
+def last_value(lst):
+    if lst is None or lst is pd.NA or not hasattr(lst, "__iter__"):
+        return None
+    cleaned = [x for x in lst if x is not None and x is not pd.NA]
+    if not cleaned:
+        return None
+    return cleaned[-1]
 
 
 def normalize_binary(data):

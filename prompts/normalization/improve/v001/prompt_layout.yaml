@@ -1,0 +1,10 @@
+system: |-
+  {instructions}
+user: |-
+  post:
+  {post}
+
+  claim:
+  {claim}
+cumulated_fields:
+  claim: "plain_content"

@@ -30,29 +30,36 @@ def make_call(llm, step_id, prompt_id, variables, max_iterations):
         return list(set(response))
     else:
         return "Error"
-    
+
+
 # registry for task functions
 TASKS = {}
+
 
 def register_task(name):
     """
     Decorator to register a function under a given task name.
     Usage: @register_task('check')
     """
+
     def decorator(func):
         TASKS[name] = func
         return func
+
     return decorator
 
-@register_task('check')
+
+@register_task("check")
 def func_check():
     print("Running check…")
     # your check logic here
 
-@register_task('extract')
+
+@register_task("extract")
 def func_extract():
     print("Running extract…")
     # your extract logic here
+
 
 def run_task(task_name, *args, **kwargs):
     """
@@ -65,8 +72,9 @@ def run_task(task_name, *args, **kwargs):
         raise ValueError(f"Unknown task: {task_name!r}") from None
     return fn(*args, **kwargs)
 
-if __name__ == '__main__':
-    for task in ('check', 'extract', 'delete'):
+
+if __name__ == "__main__":
+    for task in ("check", "extract", "delete"):
         try:
             run_task(task)
         except ValueError as e:

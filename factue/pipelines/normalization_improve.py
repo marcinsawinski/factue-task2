@@ -8,16 +8,15 @@ from factue.methods.llm_calls import make_call
 from factue.pipelines.base_llm_task import BaseLLmTask, GenericBatchWrapper
 from factue.utils.args import get_args
 from factue.utils.logger import get_logger
-from factue.utils.parsers import (expand_series_of_dict_lists, most_frequent,
-                                  normalize_binary_list)
+from factue.utils.parsers import expand_series_of_dict_lists, last_value
 from factue.utils.types import Job
 
 logger = get_logger(__name__)
 
 
-class PersuasionDetectTask(BaseLLmTask):
+class ImproveClaimTask(BaseLLmTask):
     def _process_df(self, df, llm):
-        df = df  # .head(2).copy()
+        df = df#.head(2).copy()
         df["output_id"] = self.output_id
         df["prompt_name"] = self.prompt_name
         df["prompt_version"] = self.prompt_version
@@ -37,38 +36,37 @@ class PersuasionDetectTask(BaseLLmTask):
                 step=self.step,
                 prompt_name=self.prompt_name,
                 prompt_version=self.prompt_version,
-                variables={"text": row["text"], "text_lang": row["text_lang"]},
+                variables={"post": row["text"], "claim": row["reference"]},
                 max_iterations=self.max_iterations,
             ),
             axis=1,
         )
         df_expanded = expand_series_of_dict_lists(make_call_result)
         df = pd.concat([df, df_expanded], axis=1)
-        if "verdict" in df.columns:
-            df["verdict"] = df["verdict"].apply(normalize_binary_list)
-            df["pred"] = df["verdict"].apply(most_frequent)
+        df["check_result"] = 0
+        if "plain_content" in df.columns:
+            df["final"] = df["plain_content"].apply(last_value)
 
-        if "label_multi" in df.columns:
-            df["gold"] = (
-                df["label_multi"]
-                .apply(lambda x: self.prompt_name in x)
-                .apply(normalize_binary_list)
-            )
         if "error" in df.columns:
             df["error"] = df["error"].astype(str)
+        else:
+            df["error"] = None
 
         return df
 
 
-class PersuasionDetectWrapper(GenericBatchWrapper):
+class ImproveClaimWrapper(GenericBatchWrapper):
 
-    task_cls = PersuasionDetectTask
-    input_dir = Path("data/preprocessed/persuasion")
-    job = Job.PERSUASION
-    step = "detect"
+    task_cls = ImproveClaimTask  # ← subclasses must set this to a Luigi Task subclass
+    input_dir = Path("data/cleaned/normalization")
+    job = Job.NORMALIZATION
+    step = "improve"
+
+    def _get_input_mask(self):
+        return f"{self.split}/{self.split}-{self.lang}/*part_{self.part}.parquet"
 
 
 if __name__ == "__main__":
-    logger = get_logger(__name__)
-    args = get_args(sys.argv[1:], wrapper="PersuasionDetectWrapper")
+    get_logger(__name__)
+    args = get_args(sys.argv[1:], wrapper="ImproveClaimWrapper")
     luigi.run(args)

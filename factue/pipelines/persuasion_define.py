@@ -35,7 +35,11 @@ class PersuasionDefineTask(BaseLLmTask):
         definition_prev = None
 
         for idx, row in df.iterrows():
-            definition_base = row["definition_initial"] if definition_prev is None else definition_prev
+            definition_base = (
+                row["definition_initial"]
+                if definition_prev is None
+                else definition_prev
+            )
             variables = {
                 "technique_name": row["technique_name"],
                 "definition_base": definition_base,
@@ -51,16 +55,15 @@ class PersuasionDefineTask(BaseLLmTask):
                 variables=variables,
                 max_iterations=self.max_iterations,
             )
-            call_result[0]['definition_base'] = definition_base
+            call_result[0]["definition_base"] = definition_base
             raw = call_result[0].get("raw", None)
             logger.info(f"raw: {raw}")
-            if raw is None or len(raw)<10:
+            if raw is None or len(raw) < 10:
                 definition_prev = definition_base
                 logger.info("KEEPING SAME BASE")
             else:
                 definition_prev = raw
                 logger.info("ADDING NEW BASE")
-
 
             logger.info(f"call_result: {call_result}")
             logger.info(f"definition_prev: {definition_prev}")
@@ -86,6 +89,7 @@ class PersuasionDefineWrapper(GenericBatchWrapper):
 
     def _get_input_mask(self):
         return f"{self.part}.parquet"
+
 
 if __name__ == "__main__":
     logger = get_logger(__name__)

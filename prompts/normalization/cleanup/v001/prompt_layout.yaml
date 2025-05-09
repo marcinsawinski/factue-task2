@@ -1,0 +1,24 @@
+schema:
+  type: object
+  properties:
+    complete_mismatch:
+      type: boolean
+    media_reference:
+      type: boolean
+    added_information:
+      type: boolean
+  required:
+    - complete_mismatch
+    - media_reference
+    - added_information
+  additionalProperties: true
+system: |-
+  {instructions}
+  Examples:
+  {examples}
+user: |-
+  post:
+  {post}
+
+  claim:
+  {claim}

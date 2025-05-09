@@ -12,6 +12,7 @@ METADATA_PART_NAME = "metadata"
 SYSTEM_PART_NAME = "system"
 USER_PART_NAME = "user"
 SCHEMA_PART_NAME = "schema"
+CUMULATED_FIELDS_NAME = "cumulated_fields"
 PROMPTS_DIR = "prompts"
 
 
@@ -49,11 +50,18 @@ def build_prompt(job, step, prompt_name, prompt_version, variables):
         job, step, prompt_name, prompt_version
     )
     messages = []
+    # logger.info(f"prompt_content:{prompt_content}")
+    # logger.info(f"prompt_layout:{prompt_layout}")
 
     if SCHEMA_PART_NAME in prompt_layout:
         json_schema = prompt_layout[SCHEMA_PART_NAME]
     else:
         json_schema = None
+
+    if CUMULATED_FIELDS_NAME in prompt_layout:
+        cumulated_fields = prompt_layout[CUMULATED_FIELDS_NAME]
+    else:
+        cumulated_fields = None
 
     if SYSTEM_PART_NAME in prompt_layout:
         messages.append(
@@ -71,7 +79,7 @@ def build_prompt(job, step, prompt_name, prompt_version, variables):
     placeholders = {**variables, **prompt_content}
 
     messages = prompt_template.format_messages(**placeholders)
-    return messages, json_schema
+    return messages, json_schema, cumulated_fields
 
 
 def make_call(
@@ -85,18 +93,21 @@ def make_call(
     max_retries=3,
 ):
 
-    messages, json_schema = build_prompt(
-        job, step, prompt_name, prompt_version, variables
-    )
+    current_variables = variables
     response = []
 
     for i in range(max_iterations):
+        messages, json_schema, cumulated_fields = build_prompt(
+            job, step, prompt_name, prompt_version, current_variables
+        )
+
         retries = 0
         if json_schema is None:
             max_retries = 0
+        # logger.info(f"Cumulated_fields: {cumulated_fields}")
         while retries <= max_retries:
             try:
-                logger.debug(f"prompt: {messages}")
+                # logger.info(f"Prompt: {messages}")
                 raw_msg = llm.invoke(messages)
                 raw_content = raw_msg.content.strip()
                 validated_msg = validate_response(raw_content, json_schema)
@@ -121,6 +132,19 @@ def make_call(
                         None, None, error="Unhandled exception during LLM call"
                     )
                 ]
+            logger.info(f"Cumulated_fields: {cumulated_fields}")
+        if cumulated_fields is not None:
+            no_change_flag = True
+            for field_in, field_out in cumulated_fields.items():
+                if current_variables[field_in] != validated_msg[field_out]:
+                    logger.info(f"REPLACE:{current_variables[field_in]}")
+                    logger.info(f"WITH:{validated_msg[field_out]}")
+                    current_variables[field_in] = validated_msg[field_out]
+
+                    no_change_flag = False
+            if no_change_flag:
+                logger.info(f"BREAK")
+                break
 
         else:
             # Reached max_retries without success

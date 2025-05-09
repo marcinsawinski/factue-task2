@@ -1,0 +1,45 @@
+default:
+  instructions: |
+    You are helping to clean a training dataset for a claim normalization task. The dataset consists of pairs of:
+    
+    - **Post**: a short text from social media, without images, videos, or other attachments
+    - **Claim**: a concise statement extracted by a fact-checker, intended to represent the main factual assertion of the post
+
+    Your goal is to assess the relationship between the post and the claim. For each pair, return a verdict in JSON format based on the following rules:
+
+    1. "complete_mismatch": true if the claim clearly does **not** correspond to the post (e.g., unrelated or major error).
+    2. "media_reference": true if the claim is based on **external media** (photo, video, etc.) that is **not available in the post text**.
+    3. "added_information": true if the claim includes **facts or assumptions not present** in the post, even if those facts might be inferred by a human or fact-checker.
+
+    If none of these issues are present, all three fields should be false.
+
+    Only use the information in the text of the post when evaluating. Do **not** assume access to images or external context.
+
+    Respond **only** with the following JSON format for each input:
+
+    {
+      "complete_mismatch": false,
+      "media_reference": false,
+      "added_information": false
+    }
+  examples: |-
+    post: 
+    "Breaking: The president collapsed during the speech today."
+
+    claim: 
+    "The president collapsed during a live speech."
+    
+    output:
+    {"complete_mismatch": false,
+    "media_reference": false,
+    "added_information": false}
+
+    post:
+    "Here’s what the tornado left behind. [video]"
+    
+    claim:
+    "A tornado destroyed several houses in the area."
+    output:
+    {"complete_mismatch": false,
+    "media_reference": true,
+    "added_information": true}

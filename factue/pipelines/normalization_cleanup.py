@@ -15,7 +15,7 @@ from factue.utils.types import Job
 logger = get_logger(__name__)
 
 
-class PersuasionDetectTask(BaseLLmTask):
+class CleanupClaimTask(BaseLLmTask):
     def _process_df(self, df, llm):
         df = df  # .head(2).copy()
         df["output_id"] = self.output_id
@@ -37,38 +37,40 @@ class PersuasionDetectTask(BaseLLmTask):
                 step=self.step,
                 prompt_name=self.prompt_name,
                 prompt_version=self.prompt_version,
-                variables={"text": row["text"], "text_lang": row["text_lang"]},
+                variables={"post": row["text"], "claim": row["reference"]},
                 max_iterations=self.max_iterations,
             ),
             axis=1,
         )
         df_expanded = expand_series_of_dict_lists(make_call_result)
         df = pd.concat([df, df_expanded], axis=1)
-        if "verdict" in df.columns:
-            df["verdict"] = df["verdict"].apply(normalize_binary_list)
-            df["pred"] = df["verdict"].apply(most_frequent)
+        df["check_result"] = 0
+        for field in ["complete_mismatch", "media_reference", "added_information"]:
+            if field in df.columns:
+                df[field] = df[field].apply(normalize_binary_list)
+                df[field] = df[field].apply(most_frequent)
+                df["check_result"] = df["check_result"] + df[field]
 
-        if "label_multi" in df.columns:
-            df["gold"] = (
-                df["label_multi"]
-                .apply(lambda x: self.prompt_name in x)
-                .apply(normalize_binary_list)
-            )
         if "error" in df.columns:
             df["error"] = df["error"].astype(str)
+        else:
+            df["error"] = None
 
         return df
 
 
-class PersuasionDetectWrapper(GenericBatchWrapper):
+class CleanupClaimWrapper(GenericBatchWrapper):
 
-    task_cls = PersuasionDetectTask
-    input_dir = Path("data/preprocessed/persuasion")
-    job = Job.PERSUASION
-    step = "detect"
+    task_cls = CleanupClaimTask  # ← subclasses must set this to a Luigi Task subclass
+    input_dir = Path("data/preprocessed/normalization")
+    job = Job.NORMALIZATION
+    step = "cleanup"
+
+    def _get_input_mask(self):
+        return f"{self.split}/{self.split}-{self.lang}/batch_{self.part}.parquet"
 
 
 if __name__ == "__main__":
-    logger = get_logger(__name__)
-    args = get_args(sys.argv[1:], wrapper="PersuasionDetectWrapper")
+    get_logger(__name__)
+    args = get_args(sys.argv[1:], wrapper="CleanupClaimWrapper")
     luigi.run(args)
