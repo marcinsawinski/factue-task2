@@ -5,11 +5,17 @@ class Job(str, Enum):
     PERSUASION = "persuasion"
     NORMALIZATION = "normalization"
 
+    def __str__(self):
+        return self.value
+
 
 class ModelMode(str, Enum):
     CHAT = "chat"
     LLM = "llm"
     EMBEDDINGS = "embeddings"
+
+    def __str__(self):
+        return self.value
 
 
 class ModelProvider(str, Enum):
@@ -18,6 +24,9 @@ class ModelProvider(str, Enum):
     OPENAI = "openai"
     AZURE_OPENAI = "azure_openai"
     VLLM = "vllm"
+
+    def __str__(self):
+        return self.value
 
 
 class ModelName(str, Enum):
@@ -30,13 +39,16 @@ class ModelName(str, Enum):
     GPT_4O_MINI = "gpt-4o-mini"
     GPT_41_MINI = "gpt-4.1-mini"
     GPT_41_MINI_FT1 = "gpt-4-1-mini-2025-04-14-ft-persuasion-detect-v1"
-    GPT_41_MINI_FT2_11 ="gpt-4-1-mini-2025-04-14-ft-pers_v2_r11"
-    GPT_41_MINI_FT2_21 ="gpt-4-1-mini-2025-04-14-ft-pers_v2_r21"
-    GPT_41_MINI_FT2_31 ="gpt-4-1-mini-2025-04-14-ft-pers_v2_r31"
+    GPT_41_MINI_FT2_11 = "gpt-4-1-mini-2025-04-14-ft-pers_v2_r11"
+    GPT_41_MINI_FT2_21 = "gpt-4-1-mini-2025-04-14-ft-pers_v2_r21"
+    GPT_41_MINI_FT2_31 = "gpt-4-1-mini-2025-04-14-ft-pers_v2_r31"
     GPT_41 = "gpt-4.1"
     GPT_4O = "gpt-4o"
     O4_MINI = "o4-mini"
     DEFAULT = "deafault"
+
+    def __str__(self):
+        return self.value
 
     @classmethod
     def key_of(cls, value):

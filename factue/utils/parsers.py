@@ -180,7 +180,7 @@ def expand_series_of_dict_lists(series):
     return series.apply(extract_keys).apply(pd.Series)
 
 
-##################################################### old ################################################
+#  old
 def safe_json_loads(s):
     # print(isinstance(s, str))
 
@@ -246,7 +246,7 @@ def extract_think_and_json(text):
             return result
         except json.JSONDecodeError as e:
             pass
-            # print("JSONDecodeError in code block:", e)
+            print("JSONDecodeError in code block:", e)  # TODO add logger
 
     # Fallback: try to extract raw JSON object
     json_fallback_match = re.search(r"(\{[\s\S]*\})", after_think)
@@ -257,8 +257,7 @@ def extract_think_and_json(text):
         try:
             result["json_data"] = safe_json_loads(json_str)
         except json.JSONDecodeError as e:
-            pass
-            # print("JSONDecodeError in fallback:", e)
+            print("JSONDecodeError in fallback:", e)  # TODO add logger
 
     return result
 

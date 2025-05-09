@@ -22,6 +22,7 @@ langchain
 langchain_openai
 langchain_ollama
 langchain_huggingface
+langchain_community
 llama-cpp-python
 lmstudio
 weave
@@ -34,3 +35,4 @@ gpustat
 types-PyYAML
 demjson3
 seaborn
+ruamel.yaml

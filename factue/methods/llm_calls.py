@@ -73,6 +73,7 @@ def build_prompt(job, step, prompt_name, prompt_version, variables):
     messages = prompt_template.format_messages(**placeholders)
     return messages, json_schema
 
+
 def make_call(
     llm,
     job,

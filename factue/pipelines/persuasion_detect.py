@@ -55,7 +55,7 @@ class PersuasionDetectTask(BaseLLmTask):
                 .apply(normalize_binary_list)
             )
         if "error" in df.columns:
-            df['error']=df['error'].astype(str)
+            df["error"] = df["error"].astype(str)
 
         return df
 

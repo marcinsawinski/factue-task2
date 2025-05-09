@@ -9,9 +9,11 @@ pd.set_option("display.expand_frame_repr", False)  # Avoid frame splitting
 # from IPython.display import HTML, display
 
 
-def disp(df):
+def disp(df, limit=None):
     # Create a style with wrapped text in selected columns
-    return df.style.set_properties(
+    if limit is None:
+        limit = len(df)
+    return df.head(limit).style.set_properties(
         subset=df.columns,
         **{
             "white-space": "pre-wrap",

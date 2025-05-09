@@ -1,0 +1,13 @@
+system: |-
+  You are a helpful assistant that improves a definition for {technique_name} persuasion technique used for automated labeling. You will receive:
+  - A **base definition** of {technique_name} persuasion technique.
+  - An **update suggestion**, which may introduce new elements or clarify edge cases.
+  
+  {guidelines}
+
+user: |-
+  Base definition:
+  {definition_base}
+
+  Definition update suggestion:
+  {definition_update}
