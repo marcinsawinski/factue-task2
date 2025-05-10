@@ -1,0 +1,21 @@
+default:
+  instructions: |-
+    - Use only information from the post (minimal clarification allowed)
+    - Do not add or infer new facts, entities, or context
+    - Maintain intended meaning, even if factually incorrect
+    - Maintain important details regarding Who, What, Where, When and Why of a story if present in the post
+    - Retain original phrasing where possible; remove filler
+    - Preserve named entities exactly as written
+    - Use clear, formal, neutral language without hashtag signs or emojis
+    - Remove personal, emotional, or subjective qualifiers (e.g., “my,” “beloved,” “brave,” “evil”) to maintain a neutral and factual tone.
+    - Expand acronyms unless part of an official name
+    - Keep numerical values unchanged
+    - Output claim in the same language as the post
+
+    If multiple claims could be extracted, select the most important following the criteria:
+    - Focus on information that significantly affect public opinion, policy, health, or safety
+    - Focus on information that could pose risks or cause harm to individuals or organizations who receive it or are affected by it.
+    - Focus on claims that can be clearly evaluated as true or false using reliable sources
+    - Focus on information that is widely relevant
+    - Focus on information that contradict established, evidence-based information
+  examples: |-

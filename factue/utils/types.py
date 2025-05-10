@@ -42,10 +42,13 @@ class ModelName(str, Enum):
     GPT_41_MINI_FT2_11 = "gpt-4-1-mini-2025-04-14-ft-pers_v2_r11"
     GPT_41_MINI_FT2_21 = "gpt-4-1-mini-2025-04-14-ft-pers_v2_r21"
     GPT_41_MINI_FT2_31 = "gpt-4-1-mini-2025-04-14-ft-pers_v2_r31"
+    GPT_41_MINI_FTAN = "gpt41-mini-ft-all-norm"
     GPT_41 = "gpt-4.1"
     GPT_4O = "gpt-4o"
     O4_MINI = "o4-mini"
-    DEFAULT = "deafault"
+    DEFAULT = "default"
+    DEEPSEEK2GPT = "DEEPSEEK2GPT"
+    NA = False
 
     def __str__(self):
         return self.value

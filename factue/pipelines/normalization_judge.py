@@ -9,6 +9,7 @@ from factue.pipelines.base_llm_task import BaseLLmTask, GenericBatchWrapper
 from factue.utils.args import get_args
 from factue.utils.logger import get_logger
 from factue.utils.parsers import expand_series_of_dict_lists, last_value, dedup_list
+from factue.utils.types import Job, ModelMode, ModelName, ModelProvider
 from factue.utils.types import Job
 
 logger = get_logger(__name__)
@@ -93,12 +94,14 @@ class JudgeClaimWrapper(GenericBatchWrapper):
     input_dir = Path("data/llm_output/normalization/improve")
     job = Job.NORMALIZATION
     step = "judge"
+    model_override = luigi.EnumParameter(enum=ModelName, default=ModelName.NA)
 
     def _get_output_id(self):
         return ""
 
     def _get_input_mask(self):
-        return f"{self.model_name.name}/{self.prompt_version}/*/{self.split}/{self.split}-{self.lang}/*_{self.part}.parquet"
+        override = self.model_override != ModelName.NA
+        return f"{self.model_override.name if override else self.model_name.name}/{self.prompt_version}/*/{self.split}/{self.split}-{self.lang}/*_{self.part}.parquet"
 
 
 if __name__ == "__main__":
