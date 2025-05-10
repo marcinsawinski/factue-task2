@@ -2,8 +2,8 @@ system: |-
   Choose claim candidate that best captures main claim from social media post according to instructions.
 
   Input:
-    - post: short social media text
-    - list of claim candidates: attempts to formulate a concise statement representing post’s main factual assertion
+  - post: short social media text
+  - list of claim candidates: attempts to formulate a concise statement representing post’s main factual assertion
 
   Instructions for a most correct claim:
   {instructions}
