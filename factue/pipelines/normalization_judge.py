@@ -32,7 +32,7 @@ class JudgeClaimTask(BaseLLmTask):
             "claim_improved",
             "original_index",
         ]
-
+        cols_to_keep = [x for x in cols_to_keep if x in df.columns]
         df = df[cols_to_keep]
         cols_to_collapse = ["claim_candidate", "claim_improved"]  # add more if needed
         cols_constant = [col for col in df.columns if col not in cols_to_collapse]
@@ -95,7 +95,7 @@ class JudgeClaimWrapper(GenericBatchWrapper):
         return ""
 
     def _get_input_mask(self):
-        return f"{self.model_name.name}/{self.prompt_version}/*/{self.split}/{self.split}-{self.lang}/*part_{self.part}.parquet"
+        return f"{self.model_name.name}/{self.prompt_version}/*/{self.split}/{self.split}-{self.lang}/*_{self.part}.parquet"
 
 
 if __name__ == "__main__":
