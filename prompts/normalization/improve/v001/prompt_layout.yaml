@@ -1,5 +1,16 @@
 system: |-
+  Refine main claim extracted from social media post using instructions as reference.
+
+  Input:
+  - post: short social media text
+  - claim: concise statement representing post’s main factual assertion
+
+  Instructions for correct claim extraction:
   {instructions}
+
+  Output only the final claim text.
+  Do not include any additional information, explanations, or formatting.
+  
 user: |-
   post:
   {post}

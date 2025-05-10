@@ -8,17 +8,19 @@ from factue.methods.llm_calls import make_call
 from factue.pipelines.base_llm_task import BaseLLmTask, GenericBatchWrapper
 from factue.utils.args import get_args
 from factue.utils.logger import get_logger
-from factue.utils.parsers import expand_series_of_dict_lists
+from factue.utils.parsers import expand_series_of_dict_lists, last_value, dedup_list
 from factue.utils.types import Job
 
 logger = get_logger(__name__)
 
 
 def format_claim_candidates(claims):
+    # return "\n\n".join(
+    #     f"claim candidate {i + 1}:\n{claim}" for i, claim in enumerate(claims)
+    # )
     return "\n\n".join(
-        f"claim candidate {i + 1}:\n{claim}" for i, claim in enumerate(claims)
-    )
-
+            f"claim candidate:\n{claim}" for i, claim in enumerate(claims)
+        )
 
 class JudgeClaimTask(BaseLLmTask):
     def _process_df(self, df, llm):
@@ -41,6 +43,7 @@ class JudgeClaimTask(BaseLLmTask):
 
         # Collapse back by original index
         df = df.groupby(df["original_index"]).agg(agg_dict)
+        df['claim_improved'] = df['claim_improved'].apply(dedup_list)
 
         df["output_id"] = self.output_id
         df["prompt_name"] = self.prompt_name
@@ -63,18 +66,18 @@ class JudgeClaimTask(BaseLLmTask):
                 prompt_version=self.prompt_version,
                 variables={
                     "post": row["text"],
-                    "claim_candidates": format_claim_candidates(row["claim_candidate"]),
+                    "claim_candidates": format_claim_candidates(row["claim_improved"]),
                 },
                 max_iterations=self.max_iterations,
-            )if isinstance(row["claim_candidate"], list) and len(row["claim_candidate"]) > 1 else (
-        {'plain_content': row["claim_candidate"][0]} if isinstance(row["claim_candidate"], list) and len(row["claim_candidate"]) == 1
-        else {'plain_content': row["claim_candidate"]}),
+            ) if isinstance(row["claim_improved"], list) and len(row["claim_improved"]) > 1
+            else [{'plain_content': x, 'status':'single_candidate'} for x in row["claim_improved"]],
             axis=1,
         )
+        logger.info(f"make_call_result: {make_call_result}")
         df_expanded = expand_series_of_dict_lists(make_call_result)
         df = pd.concat([df, df_expanded], axis=1)
         if "plain_content" in df.columns:
-            df["claim"] = df["plain_content"]
+            df["claim"] = df["plain_content"].apply(last_value)
 
         if "error" in df.columns:
             df["error"] = df["error"].astype(str)

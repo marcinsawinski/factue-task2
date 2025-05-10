@@ -1,12 +1,15 @@
 import ast
 import json
 import re
+import numpy as np
 from collections import Counter, defaultdict
 
 import demjson3
 import pandas as pd
 from jsonschema import ValidationError, validate
+from factue.utils.logger import get_logger
 
+logger = get_logger(__name__)
 
 def replace_empty_dicts_in_list(x):
     if isinstance(x, list):
@@ -279,8 +282,13 @@ def most_frequent(lst):
         return None
     return Counter(cleaned).most_common(1)[0][0]
 
+def dedup_list(x):
+    if isinstance(x, (list, np.ndarray)):
+        return list(dict.fromkeys(x.tolist() if isinstance(x, np.ndarray) else x))
+    return x  # in case it's NaN or something unexpected
 
 def last_value(lst):
+    logger.info(f'last from: {lst}')
     if lst is None or lst is pd.NA or not hasattr(lst, "__iter__"):
         return None
     cleaned = [x for x in lst if x is not None and x is not pd.NA]
