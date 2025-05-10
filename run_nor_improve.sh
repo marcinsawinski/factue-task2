@@ -7,10 +7,10 @@ python -m factue.pipelines.normalization_improve \
     --split dev \
     --max-iterations 10 \
     --seed 0 \
-    --model-name LLAMA_31_8B \
-    --model-provider OLLAMA \
+    --model-name GPT_41_MINI \
+    --model-provider AZURE_OPENAI \
     --model-mode CHAT \
-    --part "0000" \
+    --part "0001" \
     --lang "eng" \
     "$@" 
 

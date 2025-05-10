@@ -1,24 +1,27 @@
 default:
   instructions: |-
-    Extract main claim from social media post
-    
-    input: post: short social media text
-    
-    instructions for correct claim extraction:
+    Choose claim candidate that best captures main claim from social media post
+
+    input:
+      - post: short social media text
+      - list of claim candidates: attepmts to formulate a concise statement representing post’s main factual assertion
+
+    instructions for a most correct claim:
       - Use only information from the post (minimal clarification allowed)
       - Do not add or infer new facts, entities, or context
       - Maintain intended meaning, even if factually incorrect
       - Maintain important details regarding Who, What, Where, When and Why of a story if present in the post
       - Retain original phrasing where possible; remove filler
       - Preserve named entities exactly as written
-      - Use clear, formal, neutral language without hashtag signs or emojis
+      - Use clear, formal, neutral language
       - Remove personal, emotional, or subjective qualifiers (e.g., “my,” “beloved,” “brave,” “evil”) to maintain a neutral and factual tone.
       - Expand acronyms unless part of an official name
       - Keep numerical values unchanged
       - If multiple facts, select the most important one
       - Keep same language as the post
       - If no serious changes are needed, return the original claim exactly
-    
-    Output only the final claim text.
+
+    Output only the text of best claim candidate. 
+    Do not alter claim candidate text.
     Do not include any additional information, explanations, or formatting.
   examples: |-

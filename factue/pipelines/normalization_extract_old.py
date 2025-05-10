@@ -40,6 +40,6 @@ class ExtractClaimWrapper(GenericBatchWrapper):
 
 
 if __name__ == "__main__":
-    get_logger()
+    get_logger(__name__)
     args = get_args(sys.argv[1:], wrapper="GenericBatchWrapper")
     luigi.run(args)

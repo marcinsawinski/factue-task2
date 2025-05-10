@@ -16,7 +16,7 @@ logger = get_logger(__name__)
 
 class ImproveClaimTask(BaseLLmTask):
     def _process_df(self, df, llm):
-        df = df#.head(2).copy()
+        df = df  # .head(2).copy()
         df["output_id"] = self.output_id
         df["prompt_name"] = self.prompt_name
         df["prompt_version"] = self.prompt_version

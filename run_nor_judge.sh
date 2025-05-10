@@ -1,13 +1,12 @@
 #!/bin/bash
 clear
 set -e  # Exit on error
-python -m factue.pipelines.normalization_extract \
+python -m factue.pipelines.normalization_judge \
     --prompt-name default \
     --prompt-version v001 \
     --split dev \
-    --max-iterations 3 \
-    --seed -1 \
-    --temperature 0.2 \
+    --max-iterations 1 \
+    --seed 0 \
     --model-name GPT_41_MINI \
     --model-provider AZURE_OPENAI \
     --model-mode CHAT \

@@ -74,7 +74,7 @@ class PersuasionExplainWrapper(GenericBatchWrapper):
         PersuasionExplainTask  # ← subclasses must set this to a Luigi Task subclass
     )
     input_dir = Path("data/preprocessed/persuasion")
-    job = Job.PERSUASION.value
+    job = Job.PERSUASION
     step = "explain"
 
 

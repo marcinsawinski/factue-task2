@@ -8,7 +8,7 @@ from factue.methods.llm_calls import make_call
 from factue.pipelines.base_llm_task import BaseLLmTask, GenericBatchWrapper
 from factue.utils.args import get_args
 from factue.utils.logger import get_logger
-from factue.utils.parsers import expand_series_of_dict_lists, last_value
+from factue.utils.parsers import expand_series_of_dict_lists
 from factue.utils.types import Job
 
 logger = get_logger(__name__)
@@ -16,7 +16,7 @@ logger = get_logger(__name__)
 
 class ExtractClaimTask(BaseLLmTask):
     def _process_df(self, df, llm):
-        df = df#.head(2).copy()
+        df = df  # .head(2).copy()
         df["output_id"] = self.output_id
         df["prompt_name"] = self.prompt_name
         df["prompt_version"] = self.prompt_version
@@ -44,7 +44,7 @@ class ExtractClaimTask(BaseLLmTask):
         df_expanded = expand_series_of_dict_lists(make_call_result)
         df = pd.concat([df, df_expanded], axis=1)
         if "plain_content" in df.columns:
-            df["final"] = df["plain_content"].apply(last_value)
+            df["claim_candidate"] = df["plain_content"]
 
         if "error" in df.columns:
             df["error"] = df["error"].astype(str)

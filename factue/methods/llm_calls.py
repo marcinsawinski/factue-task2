@@ -143,14 +143,15 @@ def make_call(
 
                     no_change_flag = False
             if no_change_flag:
-                logger.info(f"BREAK")
+                logger.info("BREAK LOOP - no improvements")
                 break
 
         else:
+            pass
             # Reached max_retries without success
-            response.append(
-                validated_msg
-            )  # {'error': f"Failed after {max_retries} retries"})
+            # response.append(
+            #     validated_msg
+            # )  # {'error': f"Failed after {max_retries} retries"})
 
     return (
         response
