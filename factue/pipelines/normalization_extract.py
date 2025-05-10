@@ -62,7 +62,8 @@ class ExtractClaimWrapper(GenericBatchWrapper):
     step = "extract"
 
     def _get_input_mask(self):
-        return f"{self.split}/{self.split}-{self.lang}/*part_{self.part}.parquet"
+        # return f"{self.split}/{self.split}-{self.lang}/*part_{self.part}.parquet"
+        return f"{self.split}/*-{self.lang}/*_{self.part}.parquet"
 
 
 if __name__ == "__main__":

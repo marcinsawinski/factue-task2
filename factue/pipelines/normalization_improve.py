@@ -30,6 +30,7 @@ class ImproveClaimTask(BaseLLmTask):
             "claim_candidate",
             "original_index",
         ]
+        cols_to_keep = [x for x in cols_to_keep if x in df.columns]
         df['claim_candidate'] = df['claim_candidate'].apply(dedup_claims)
         df = df[cols_to_keep].explode("claim_candidate")
         df["claim_candidate_order"] = df.groupby(level=0).cumcount() + 1
@@ -83,7 +84,8 @@ class ImproveClaimWrapper(GenericBatchWrapper):
         return ""
 
     def _get_input_mask(self):
-        return f"{self.model_name.name}/{self.prompt_version}/{self.prompt_name}/{self.split}/*-{self.lang}/*part_{self.part}.parquet"
+        # return f"{self.model_name.name}/{self.prompt_version}/{self.prompt_name}/{self.split}/*-{self.lang}/*part_{self.part}.parquet"
+        return f"{self.model_name.name}/{self.prompt_version}/{self.prompt_name}/{self.split}/*-{self.lang}/*_{self.part}.parquet"
 
 
 if __name__ == "__main__":
