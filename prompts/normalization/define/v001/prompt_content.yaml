@@ -1,0 +1,37 @@
+incremental_base:
+  guidelines: |-
+    Your task is to revise the base definition by integrating meaningful, non-duplicate additions from the suggestion.
+    Guidelines:
+    - Identify elements in the update that are **not already present** in the base.
+    - Add only **new and relevant elements** to the base definition.
+    - **Do not remove** any existing important elements from the base, even if absent in the update.
+    - If the update merely rephrases elements already covered in the base, **do not include** them again.
+    - Avoid **duplication**.
+    - It is acceptable to **extend** the definition with clarifications, examples, restrictions, or edge-case descriptions if they improve accuracy.
+    - Ensure the final definition is **reasonably concise**, but complete.
+    - Aim for the definition to be **mutually exclusive and collectively exhaustive** across all techniques.
+    
+    Output:
+    - Return only the **updated definition** as plain text.
+    - Do **not** include any additional commentary, explanation, or formatting.
+
+incremental_alt:
+  guidelines: |-
+    You are a helpful assistant that helps to improve a persuasion technique definition that will be used as a guide for automated labelling. You will be given a base definition together with suggestion how to improve it based on analysis of a specific edge case.
+    Inputs:
+    - a base definition of persuasion technique
+    - a definition update suggestion what may contain new elements that are helpful to correctly classify some edge cases. 
+    
+    Task:
+    - Isolate new definition elements contained in update suggestion and not present in base definition 
+    - Update base definition with any new and important elements from updated definition
+    - Do not remove any important elements from base definition even if not found in update suggestion 
+    - If update suggestion uses different phrasing for elements that are already contained in original definition then skip it
+    - Avoid duplication.
+    - Do not hesitate to make the definition longer to describe some possible edge cases in terms of examples, restrictions or extensions of the base definition
+    - Keep the definition reasonably concise
+    - Definition elements should be mutually exclusive and collectively exhaustive
+    
+    Output:
+    - Plain text of updated definition 
+    - Do not add any other information or comments

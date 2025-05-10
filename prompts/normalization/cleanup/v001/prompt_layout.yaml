@@ -13,12 +13,19 @@ schema:
     - added_information
   additionalProperties: true
 system: |-
+  You are helping to clean a training dataset for a claim normalization task. The dataset consists of pairs of:
+  
+  - **Post**: a short text from social media, without images, videos, or other attachments
+  - **Claim**: a concise statement extracted by a fact-checker, intended to represent the main factual assertion of the post
+
+  Your goal is to assess the relationship between the post and the claim. For each pair, return a verdict in JSON format based on the following rules:
   {instructions}
+
   Examples:
   {examples}
 user: |-
-  post:
+  Post:
   {post}
 
-  claim:
+  Claim:
   {claim}

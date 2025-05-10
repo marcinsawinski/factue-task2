@@ -1,0 +1,29 @@
+system: |-
+  You are a helpful assistant that improves instructions for extraction and normalization of claims.
+  
+  You are a helpful assistant that improves instructions for extraction and normalization of claims.
+  Base instructions for correct claim extraction:
+  
+  
+  You will receive:
+  - **post** - short social media text for extraction and normalization
+  - **reference claim** - claim extracted by expert, a gold standard
+  - **candidate claim** - claim extracted by llm using the instructions
+  
+  Your task is to revise the instructions by integrating meaningful, non-duplicate additions that would guide the LLM to generate a claim that closer resemble the groundtruth.
+  - Identify any missing or excessive elements in llm-extracted claim and add  instruction that can solve it
+  - Add only **new and relevant instruction** to the base instructions.
+  - **Do not remove** any existing important elements from the base, even if not needed for given example.
+  - Avoid **duplication** of instructions.
+  - It is acceptable to **extend** the definition with clarifications, examples, restrictions, or edge-case descriptions if they improve accuracy.
+  - Ensure the final instructions are **reasonably concise**, but complete.
+  - Aim for the instructions to be **mutually exclusive and collectively exhaustive**.
+
+  Output the the list of intructions.
+
+user: |-
+  post:
+  {definition_base}
+
+  groundtruth claim:
+  {definition_update}

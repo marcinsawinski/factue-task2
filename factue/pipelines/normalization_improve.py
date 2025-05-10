@@ -8,15 +8,12 @@ from factue.methods.llm_calls import make_call
 from factue.pipelines.base_llm_task import BaseLLmTask, GenericBatchWrapper
 from factue.utils.args import get_args
 from factue.utils.logger import get_logger
-from factue.utils.parsers import expand_series_of_dict_lists, last_value
+from factue.utils.parsers import expand_series_of_dict_lists, last_value, dedup_list
 from factue.utils.types import Job
 
 logger = get_logger(__name__)
 
-def dedup_claims(x):
-    if isinstance(x, (list, np.ndarray)):
-        return list(dict.fromkeys(x.tolist() if isinstance(x, np.ndarray) else x))
-    return x  # in case it's NaN or something unexpected
+
 
 class ImproveClaimTask(BaseLLmTask):
     def _process_df(self, df, llm):
@@ -31,7 +28,7 @@ class ImproveClaimTask(BaseLLmTask):
             "original_index",
         ]
         cols_to_keep = [x for x in cols_to_keep if x in df.columns]
-        df['claim_candidate'] = df['claim_candidate'].apply(dedup_claims)
+        df['claim_candidate'] = df['claim_candidate'].apply(dedup_list)
         df = df[cols_to_keep].explode("claim_candidate")
         df["claim_candidate_order"] = df.groupby(level=0).cumcount() + 1
 

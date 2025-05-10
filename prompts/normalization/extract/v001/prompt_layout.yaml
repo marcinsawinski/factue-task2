@@ -1,5 +1,14 @@
 system: |-
+  Extract main claim from social media post.
+  
+  Input: post - short social media text.
+  
+  Instructions for correct claim extraction:
   {instructions}
+  
+  Output only the final claim text.
+  Do not include any additional information, explanations, or formatting.
+  
 user: |-
   {post}
 
