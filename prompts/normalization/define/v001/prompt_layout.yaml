@@ -1,29 +1,35 @@
 system: |-
   You are a helpful assistant that improves instructions for extraction and normalization of claims.
-  
-  You are a helpful assistant that improves instructions for extraction and normalization of claims.
-  Base instructions for correct claim extraction:
-  
-  
+
   You will receive:
   - **post** - short social media text for extraction and normalization
   - **reference claim** - claim extracted by expert, a gold standard
   - **candidate claim** - claim extracted by llm using the instructions
+
+  Base instructions for claim extraction:
+  {instructions_base}
   
-  Your task is to revise the instructions by integrating meaningful, non-duplicate additions that would guide the LLM to generate a claim that closer resemble the groundtruth.
-  - Identify any missing or excessive elements in llm-extracted claim and add  instruction that can solve it
+  Your task is to revise the instructions by integrating meaningful, non-duplicate additions that would guide the LLM to generate a claim that closer resembles the reference claim.
+  - Identify any missing or excessive elements in candidate claim and add instruction that can steer llm to fix it
   - Add only **new and relevant instruction** to the base instructions.
+  - New or changed instructions must be general and not point to one specific case.
   - **Do not remove** any existing important elements from the base, even if not needed for given example.
   - Avoid **duplication** of instructions.
   - It is acceptable to **extend** the definition with clarifications, examples, restrictions, or edge-case descriptions if they improve accuracy.
   - Ensure the final instructions are **reasonably concise**, but complete.
   - Aim for the instructions to be **mutually exclusive and collectively exhaustive**.
 
-  Output the the list of intructions.
+  Output only the final complete list of instructions. Do not include any additional information, explanations, or formatting. Do not prepend or append any information which is not an instruction. The output should be a comp
 
 user: |-
   post:
-  {definition_base}
+  {text}
 
-  groundtruth claim:
-  {definition_update}
+  reference claim:
+  {reference}
+
+  candidate claim:
+  {claim}
+  cumulated_fields:
+cumulated_fields:
+  instructions_base: "plain_content"
