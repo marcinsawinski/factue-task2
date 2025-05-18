@@ -24,6 +24,7 @@ class ModelProvider(str, Enum):
     OPENAI = "openai"
     AZURE_OPENAI = "azure_openai"
     VLLM = "vllm"
+    GCP = 'gcp'
 
     def __str__(self):
         return self.value
@@ -46,8 +47,11 @@ class ModelName(str, Enum):
     GPT_41 = "gpt-4.1"
     GPT_4O = "gpt-4o"
     O4_MINI = "o4-mini"
+    OGPT_41_MINI = "gpt-4.1-mini"
+    OGPT_41_MINI_FT = "ft:gpt-4.1-mini-2025-04-14:personal:pers1:BYKFrOwb"
     DEFAULT = "default"
     DEEPSEEK2GPT = "DEEPSEEK2GPT"
+    LLAMA_4_SCOUT_16E = "meta/llama-4-scout-17b-16e-instruct-maas"
     NA = False
 
     def __str__(self):
